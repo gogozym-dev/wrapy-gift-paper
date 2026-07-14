@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gogozym-dev.github.io/wrapy-gift-paper/sitemap.xml

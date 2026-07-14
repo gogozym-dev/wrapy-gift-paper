@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wrapy - 个性化礼物包装纸生成器</title>
+    <meta
+      name="description"
+      content="上传人物头像、添加可爱配饰，自定义颜色、纹路与文案，生成可高清打印的个性化礼物包装纸。"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://gogozym-dev.github.io/wrapy-gift-paper/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Wrapy - 个性化礼物包装纸生成器" />
+    <meta
+      property="og:description"
+      content="上传头像、添加配饰，自定义颜色、纹路与文案，生成可高清打印的礼物包装纸。"
+    />
+    <meta property="og:url" content="https://gogozym-dev.github.io/wrapy-gift-paper/" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-brand">
+        <div>
+          <h1>Wrapy</h1>
+        </div>
+      </header>
+
+      <section class="editor-panel" aria-label="人物和背景 DIY 区">
+        <div class="panel-head editor-title">
+          <h2><span>编辑</span><small>Edit</small></h2>
+        </div>
+
+        <div class="editor-section avatar-section">
+          <div class="section-title">
+            <span class="section-badge">A</span>
+            <strong>头像</strong>
+            <small>Avatar</small>
+          </div>
+          <div class="avatar-workbench">
+            <div class="portrait-stage" id="portraitStage">
+              <input id="personUpload" type="file" accept="image/*" />
+              <input id="accessoryUpload" type="file" accept="image/*" />
+              <canvas id="portraitCanvas" width="360" height="360"></canvas>
+              <button class="portrait-transform" id="portraitTransform" type="button" aria-label="移动头像">
+                <span class="close-handle portrait-close-handle" aria-hidden="true">
+                  <span class="ui-icon" data-icon="x"></span>
+                </span>
+                <span class="rotate-handle portrait-rotate-handle" aria-hidden="true">
+                  <span class="ui-icon" data-icon="rotate-cw"></span>
+                </span>
+                <span class="resize-handle portrait-resize-handle" aria-hidden="true"></span>
+                <span class="box-handle box-handle-top" aria-hidden="true"></span>
+                <span class="box-handle box-handle-left" aria-hidden="true"></span>
+                <span class="box-handle box-handle-right" aria-hidden="true"></span>
+                <span class="box-handle box-handle-bottom" aria-hidden="true"></span>
+              </button>
+              <div class="accessory-layer" id="accessoryLayer"></div>
+              <div class="empty-state" id="emptyState">
+                <span>上传人物头像</span>
+              </div>
+            </div>
+
+            <div class="avatar-actions">
+              <button class="stage-upload-button" id="stageUploadButton" type="button">
+                <span class="ui-icon" data-icon="avatar-upload" aria-hidden="true"></span>
+                <span>上传头像</span>
+              </button>
+              <div class="accessory-picker">
+                <button class="add-button" id="addAccessory" type="button">
+                  <span class="ui-icon" data-icon="accessory-add" aria-hidden="true"></span>
+                  <span>添加配饰</span>
+                </button>
+                <div class="accessory-dock" aria-label="配饰选择"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-section color-section">
+          <div class="section-title">
+            <span class="section-badge">B</span>
+            <strong>颜色</strong>
+            <small>Color</small>
+          </div>
+          <div class="color-row">
+            <div class="swatches" id="colorSwatches" aria-label="底色选择"></div>
+            <div class="custom-color-picker" id="customColorPicker">
+              <button class="custom-color-trigger" id="customColorToggle" type="button" aria-label="自定义颜色"></button>
+              <div class="custom-color-menu" id="customColorMenu" aria-label="自定义颜色类型">
+                <button class="custom-color-option" id="baseColorOption" type="button">自定义底色</button>
+                <button class="custom-color-option" id="patternColorOption" type="button">自定义纹路颜色</button>
+              </div>
+              <input id="customColor" class="visually-hidden" type="color" value="#fbfaed" aria-label="自定义底色" />
+              <input id="patternCustomColor" class="visually-hidden" type="color" value="#d8d2c8" aria-label="自定义纹路色" />
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-section">
+          <div class="section-title">
+            <span class="section-badge">C</span>
+            <strong>纹路</strong>
+            <small>Pattern</small>
+          </div>
+          <div class="pattern-options" aria-label="纹路选择">
+            <button class="pattern-pill" type="button" data-pattern="confetti">
+              <span class="pattern-icon ui-icon" data-icon="grip" aria-hidden="true"></span>点点
+            </button>
+            <button class="pattern-pill active" type="button" data-pattern="stripe">
+              <span class="pattern-icon ui-icon pattern-icon-stripe" data-icon="stripe" aria-hidden="true"></span>斜纹
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="grid">
+              <span class="pattern-icon ui-icon" data-icon="grid-3x3" aria-hidden="true"></span>格纹
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="heart">
+              <span class="pattern-icon ui-icon pattern-icon-heart" data-icon="heart" aria-hidden="true"></span>爱心
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="star">
+              <span class="pattern-icon ui-icon pattern-icon-star" data-icon="star" aria-hidden="true"></span>星星
+            </button>
+          </div>
+          <select id="patternSelect" class="visually-hidden" tabindex="-1" aria-hidden="true">
+            <option value="confetti">点点</option>
+            <option value="stripe">斜纹</option>
+            <option value="grid">格纹</option>
+            <option value="heart">爱心</option>
+            <option value="star">星星</option>
+          </select>
+        </div>
+
+        <div class="editor-section">
+          <div class="section-title">
+            <span class="section-badge">D</span>
+            <strong>文案</strong>
+            <small>Text</small>
+          </div>
+          <div class="text-controls">
+            <textarea id="copyText" rows="3">happy brithday</textarea>
+            <label class="copy-size-control">
+              <span>文字大小</span>
+              <input id="copySize" type="range" min="10" max="28" value="14" />
+            </label>
+          </div>
+        </div>
+
+        <div class="editor-section">
+          <div class="section-title">
+            <span class="section-badge">E</span>
+            <strong>画纸设置</strong>
+            <small>Paper</small>
+          </div>
+          <div class="paper-settings">
+            <label class="field field-inline">
+              <select id="paperSizeSelect">
+                <option value="cm-70-50">70 × 50 cm</option>
+                <option value="cm-100-70">100 × 70 cm</option>
+                <option value="in-30-20">30 × 20 in</option>
+                <option value="in-36-24">36 × 24 in</option>
+              </select>
+            </label>
+            <label class="slider-row">
+              <span>重复密度</span>
+              <input id="repeatDensity" type="range" min="90" max="190" value="132" />
+            </label>
+            <label class="slider-row">
+              <span>图案大小</span>
+              <input id="paperImageScale" type="range" min="38" max="110" value="58" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="preview-panel" aria-label="图纸预览区">
+        <div class="preview-toolbar">
+          <div>
+            <h2><span>预览</span><small>Preview</small></h2>
+          </div>
+          <button id="downloadBtn" type="button">
+            <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
+            <span>下载 300 DPI PNG</span>
+          </button>
+        </div>
+        <div class="paper-preview-shell">
+          <div class="paper-frame">
+            <canvas id="paperCanvas" width="1120" height="760"></canvas>
+          </div>
+        </div>
+        <div class="preview-zoom-controls" aria-label="预览缩放">
+          <button id="zoomOutBtn" type="button" title="缩小">
+            <span class="zoom-symbol" aria-hidden="true">-</span>
+          </button>
+          <span id="zoomValue">100%</span>
+          <button id="zoomInBtn" type="button" title="放大">
+            <span class="zoom-symbol" aria-hidden="true">+</span>
+          </button>
+          <button id="zoomResetBtn" type="button">
+            <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
+            <span>回位</span>
+          </button>
+        </div>
+        <div class="preview-footer">
+          <p class="print-meta" id="printMeta">70 × 50 cm · 300 DPI · 8268 × 5906 px</p>
+        </div>
+      </section>
+      <div class="poster-shape shape-purple" aria-hidden="true"></div>
+      <div class="poster-shape shape-lime" aria-hidden="true"></div>
+      <div class="poster-shape shape-blue" aria-hidden="true"></div>
+      <div class="poster-shape shape-orange" aria-hidden="true"></div>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
