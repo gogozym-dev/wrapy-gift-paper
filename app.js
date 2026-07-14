@@ -10,6 +10,10 @@ const state = {
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
   copySize: 14,
+  copyFont: "handwriting",
+  copyColor: "#050505",
+  copyOffsetX: 0,
+  copyOffsetY: 0,
   paperImageScale: DEFAULT_PAPER_IMAGE_SCALE,
   paperSize: "cm-70-50",
   previewZoom: 1,
@@ -33,6 +37,15 @@ const PREVIEW_BASE_WIDTH = 1120;
 const SYSTEM_FONT_STACK = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif';
 const HANDWRITING_FONT_STACK =
   '"Marker Felt", "Comic Sans MS", "Bradley Hand", "HanziPen SC", "Hannotate SC", "Kaiti SC", cursive';
+const COPY_FONTS = {
+  handwriting: { weight: 800, stack: HANDWRITING_FONT_STACK },
+  rounded: {
+    weight: 800,
+    stack: '"Hiragino Maru Gothic ProN", "PingFang SC", "Helvetica Neue", Arial, sans-serif',
+  },
+  sans: { weight: 800, stack: SYSTEM_FONT_STACK },
+  kaiti: { weight: 700, stack: '"Kaiti SC", "STKaiti", "KaiTi", serif' },
+};
 const ICONS = {
   "accessory-add":
     '<path d="m5 19 9.5-9.5"/><path d="m13 7 4 4"/><path d="M17 3.5v3"/><path d="M15.5 5h3"/><path d="M6.5 5.5v2"/><path d="M5.5 6.5h2"/><path d="M19 16.5v2"/><path d="M18 17.5h2"/>',
@@ -92,6 +105,10 @@ const patternButtons = document.querySelectorAll(".pattern-pill");
 const paperSizeSelect = document.querySelector("#paperSizeSelect");
 const copyText = document.querySelector("#copyText");
 const copySize = document.querySelector("#copySize");
+const copyFont = document.querySelector("#copyFont");
+const copyColor = document.querySelector("#copyColor");
+const copyOffsetX = document.querySelector("#copyOffsetX");
+const copyOffsetY = document.querySelector("#copyOffsetY");
 const repeatDensity = document.querySelector("#repeatDensity");
 const paperImageScale = document.querySelector("#paperImageScale");
 const editorPanel = document.querySelector(".editor-panel");
@@ -230,6 +247,24 @@ function bindEvents() {
   });
   copySize.addEventListener("input", (event) => {
     state.copySize = Number(event.target.value);
+    updateRangeFill(event.target);
+    render();
+  });
+  copyFont.addEventListener("change", (event) => {
+    state.copyFont = event.target.value;
+    render();
+  });
+  copyColor.addEventListener("input", (event) => {
+    state.copyColor = event.target.value;
+    render();
+  });
+  copyOffsetX.addEventListener("input", (event) => {
+    state.copyOffsetX = Number(event.target.value);
+    updateRangeFill(event.target);
+    render();
+  });
+  copyOffsetY.addEventListener("input", (event) => {
+    state.copyOffsetY = Number(event.target.value);
     updateRangeFill(event.target);
     render();
   });
@@ -470,6 +505,10 @@ function updateControls() {
     button.classList.toggle("active", button.dataset.pattern === state.pattern);
   });
   patternSelect.value = state.pattern;
+  copyFont.value = state.copyFont;
+  copyColor.value = state.copyColor;
+  copyText.style.fontFamily = getCopyFont().stack;
+  copyText.style.color = state.copyColor;
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
   portraitTransform.classList.toggle("selected", state.selectedTarget === "portrait" && Boolean(state.image));
@@ -483,7 +522,7 @@ function updateControls() {
   }
   addAccessoryButton.classList.toggle("active", state.accessoryDockOpen);
   accessoryDock.classList.toggle("is-open", state.accessoryDockOpen);
-  [copySize, repeatDensity, paperImageScale].forEach(updateRangeFill);
+  [copySize, copyOffsetX, copyOffsetY, repeatDensity, paperImageScale].forEach(updateRangeFill);
   const spec = getPrintSpec();
   printMeta.textContent = `${spec.label} · 300 DPI · ${spec.pixels.width} × ${spec.pixels.height} px`;
   updatePreviewZoom();
@@ -943,12 +982,13 @@ function drawPaperToCanvas(canvas, ctx, scaleRatio) {
       const stickerHeight = sticker ? sticker.boxHeight * sticker.scale : 0;
       const groupHeight = portraitSize + (sticker ? stickerHeight + tileLayout.gap : 0);
       const groupTop = -groupHeight / 2;
-      const stickerY = groupTop + stickerHeight / 2;
+      const stickerX = (state.copyOffsetX / 100) * repeatStep;
+      const stickerY = groupTop + stickerHeight / 2 + (state.copyOffsetY / 100) * repeatStep;
       const portraitY = groupTop + (sticker ? stickerHeight + tileLayout.gap : 0) + portraitSize / 2;
 
       ctx.save();
       ctx.translate(x + offset + tileLayout.size / 2, y + tileLayout.size / 2);
-      if (sticker) drawCopySticker(ctx, sticker, stickerY);
+      if (sticker) drawCopySticker(ctx, sticker, stickerX, stickerY);
 
       ctx.save();
       ctx.translate(0, portraitY);
@@ -988,7 +1028,8 @@ function createTileLayout(ctx, stickers, repeatStep, scaleRatio) {
   const paddingX = 9 * scaleRatio;
   const paddingY = 5 * scaleRatio;
   const gap = Math.max(12 * scaleRatio, repeatStep * 0.12);
-  const font = `800 ${fontSize}px ${HANDWRITING_FONT_STACK}`;
+  const copyFontConfig = getCopyFont();
+  const font = `${copyFontConfig.weight} ${fontSize}px ${copyFontConfig.stack}`;
 
   ctx.save();
   ctx.font = font;
@@ -1020,9 +1061,13 @@ function createTileLayout(ctx, stickers, repeatStep, scaleRatio) {
   return { size: repeatStep, gap, stickers: scaledStickers };
 }
 
-function drawCopySticker(ctx, sticker, y) {
+function getCopyFont() {
+  return COPY_FONTS[state.copyFont] || COPY_FONTS.handwriting;
+}
+
+function drawCopySticker(ctx, sticker, x, y) {
   ctx.save();
-  ctx.translate(0, y);
+  ctx.translate(x, y);
   ctx.scale(sticker.scale, sticker.scale);
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -1030,7 +1075,7 @@ function drawCopySticker(ctx, sticker, y) {
   ctx.fillStyle = "rgba(255, 254, 248, 0.5)";
   drawRoundRect(ctx, -sticker.boxWidth / 2, -sticker.boxHeight / 2, sticker.boxWidth, sticker.boxHeight, sticker.boxHeight / 2);
   ctx.fill();
-  ctx.fillStyle = "#050505";
+  ctx.fillStyle = state.copyColor;
   const firstLineY = -sticker.textHeight / 2 + sticker.lineHeight / 2;
   sticker.lines.forEach((line, lineIndex) => {
     ctx.fillText(line, 0, firstLineY + lineIndex * sticker.lineHeight);

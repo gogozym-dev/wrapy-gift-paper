@@ -996,6 +996,86 @@ input[type="range"]::-moz-range-thumb {
   overflow: hidden;
 }
 
+.copy-style-controls {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: 9px;
+  min-width: 0;
+  margin-top: 9px;
+}
+
+.copy-option {
+  display: grid;
+  min-width: 0;
+  min-height: 54px;
+  align-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid rgba(5, 5, 5, 0.06);
+  border-radius: 15px;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.copy-font-control select {
+  min-height: 24px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--ink);
+  font-weight: 400;
+  outline: 0;
+}
+
+.copy-color-control {
+  grid-template-columns: minmax(0, 1fr) 32px;
+  align-items: center;
+}
+
+.copy-color-control input[type="color"] {
+  width: 32px;
+  min-height: 32px;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid rgba(5, 5, 5, 0.14);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.copy-color-control input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.copy-color-control input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 50%;
+}
+
+.position-sliders {
+  display: grid;
+  gap: 4px;
+}
+
+.position-sliders label {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: #777;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.position-sliders input[type="range"] {
+  height: 12px;
+}
+
 .paper-settings {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr);
@@ -1304,6 +1384,11 @@ input[type="range"]::-moz-range-thumb {
     gap: 7px;
   }
 
+  .copy-style-controls {
+    grid-template-columns: 112px minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: 7px;
+  }
+
   .copy-size-control {
     border-radius: 12px;
     font-size: 14px;
@@ -1410,6 +1495,7 @@ input[type="range"]::-moz-range-thumb {
 
   .avatar-workbench,
   .text-controls,
+  .copy-style-controls,
   .paper-settings {
     grid-template-columns: 1fr;
   }
