@@ -1,10 +1,10 @@
 :root {
   color-scheme: light;
   --ink: #050505;
-  --muted: #77736d;
-  --soft: #b7b1a8;
-  --line: #ddd7ce;
-  --paper: #f7f4ed;
+  --muted: #6d6f73;
+  --soft: #b8bbc0;
+  --line: #e5e5df;
+  --paper: #f8f7f1;
   --panel: #fffef8;
   --bean: #c9f6ba;
   --lime: #efff39;
@@ -13,9 +13,7 @@
   --blue: #55c7f1;
   --accent: var(--purple);
   --accent-2: #467345;
-  --shadow: 0 22px 60px rgba(83, 68, 46, 0.1);
-  --radius-panel: 24px;
-  --radius-control: 12px;
+  --shadow: 0 20px 56px rgba(5, 5, 5, 0.09);
   --system-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
     sans-serif;
   --hand-font: "Marker Felt", "Comic Sans MS", "Bradley Hand", "HanziPen SC", "Hannotate SC",
@@ -30,8 +28,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    repeating-linear-gradient(90deg, rgba(112, 92, 64, 0.018) 0 1px, transparent 1px 80px),
-    linear-gradient(180deg, #faf7f1 0%, #f4efe7 100%);
+    radial-gradient(circle at 8% 3%, rgba(255, 255, 255, 0.94), transparent 24%),
+    radial-gradient(circle at 86% 20%, rgba(255, 255, 255, 0.72), transparent 30%),
+    linear-gradient(115deg, #fbf5ec 0%, #f7f1e9 52%, #fffaf2 100%);
   color: var(--ink);
   font-family: var(--system-font);
   font-size: 14px;
@@ -45,30 +44,6 @@ select {
 
 button {
   cursor: pointer;
-}
-
-button,
-input,
-select,
-textarea {
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease,
-    color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
-}
-
-button:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid #050505;
-  outline-offset: 2px;
 }
 
 .ui-icon {
@@ -99,9 +74,6 @@ textarea:focus-visible {
   grid-template-columns: minmax(500px, 520px) minmax(0, 1fr);
   gap: 10px 22px;
   min-height: 100vh;
-  width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
   padding: 12px 28px 18px;
   align-items: start;
   overflow: hidden;
@@ -124,9 +96,12 @@ textarea:focus-visible {
   z-index: 1;
   min-width: 0;
   overflow: hidden;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  background: rgba(255, 253, 248, 0.78);
+  border: 1px solid rgba(203, 199, 190, 0.58);
+  box-shadow:
+    0 24px 72px rgba(80, 67, 50, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
 }
 
 .editor-panel {
@@ -134,7 +109,7 @@ textarea:focus-visible {
   flex-direction: column;
   gap: 0;
   padding: 18px 24px 20px;
-  border-radius: var(--radius-panel);
+  border-radius: 28px;
 }
 
 .preview-panel {
@@ -142,7 +117,7 @@ textarea:focus-visible {
   flex-direction: column;
   gap: 14px;
   padding: 20px;
-  border-radius: var(--radius-panel);
+  border-radius: 28px;
 }
 
 .panel-head,
@@ -288,13 +263,6 @@ h2 small {
   border-radius: 50%;
   background: var(--swatch-color);
   box-shadow: none;
-  transition:
-    border-color 160ms ease,
-    transform 160ms ease;
-}
-
-.swatch:hover::before {
-  transform: scale(1.06);
 }
 
 .swatch.active {
@@ -319,9 +287,6 @@ h2 small {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.72);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
 }
 
 .swatch.active .swatch-check {
@@ -336,8 +301,8 @@ select {
   width: 100%;
   min-width: 0;
   min-height: 36px;
-  border: 1px solid #ded9d0;
-  border-radius: var(--radius-control);
+  border: 1px solid rgba(5, 5, 5, 0.08);
+  border-radius: 14px;
   background: #fffef8;
   color: var(--ink);
   font-weight: 800;
@@ -433,7 +398,7 @@ select {
 
 .avatar-workbench {
   display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(140px, 1fr);
+  grid-template-columns: minmax(0, 260px) 140px;
   gap: 16px;
   align-items: center;
 }
@@ -445,17 +410,17 @@ select {
   max-width: 260px;
   justify-self: start;
   aspect-ratio: 1;
-  border: 1px solid #d8d2c8;
-  border-radius: 18px;
+  border: 1px solid rgba(205, 199, 189, 0.62);
+  border-radius: 22px;
   background:
     linear-gradient(45deg, rgba(5, 5, 5, 0.022) 25%, transparent 25%),
     linear-gradient(-45deg, rgba(5, 5, 5, 0.022) 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, rgba(5, 5, 5, 0.022) 75%),
     linear-gradient(-45deg, transparent 75%, rgba(5, 5, 5, 0.022) 75%),
-    rgba(255, 254, 248, 0.72);
+    rgba(255, 254, 248, 0.4);
   background-position: 0 0, 0 12px, 12px -12px, -12px 0;
   background-size: 24px 24px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 -10px 24px rgba(255, 255, 255, 0.36);
 }
 
 .portrait-stage input {
@@ -492,7 +457,6 @@ select {
 .avatar-actions {
   display: grid;
   gap: 8px;
-  width: 100%;
 }
 
 .accessory-picker {
@@ -520,8 +484,9 @@ select {
   padding: 8px;
   border: 1px solid rgba(205, 199, 189, 0.62);
   border-radius: 18px;
-  background: #fffdf8;
-  box-shadow: 0 16px 34px rgba(83, 68, 46, 0.14);
+  background: rgba(255, 254, 248, 0.94);
+  box-shadow: 0 16px 28px rgba(5, 5, 5, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .accessory-dock.is-open {
@@ -747,25 +712,18 @@ select {
   justify-content: center;
   gap: 8px;
   min-height: 44px;
-  border: 1px solid #d8d2c8;
-  border-radius: var(--radius-control);
-  background: #fffdf8;
+  border: 1px solid rgba(205, 199, 189, 0.62);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.72);
   color: #181818;
   font-size: 14px;
-  font-weight: 700;
-  box-shadow: 0 6px 14px rgba(83, 68, 46, 0.06);
+  font-weight: 1000;
+  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.05);
 }
 
 .stage-upload-button {
-  background: #fffdf8;
+  background: rgba(255, 255, 255, 0.76);
   color: #181818;
-}
-
-.stage-upload-button:hover,
-.add-button:hover:not(:disabled) {
-  border-color: #050505;
-  box-shadow: 0 8px 18px rgba(83, 68, 46, 0.1);
-  transform: translateY(-1px);
 }
 
 .add-button.active {
@@ -886,14 +844,6 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
 }
 
-.custom-color-trigger:hover {
-  transform: scale(1.06);
-}
-
-.custom-color-picker.is-open .custom-color-trigger {
-  box-shadow: 0 0 0 2px #050505;
-}
-
 .custom-color-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -965,18 +915,13 @@ input[type="range"]::-moz-range-thumb {
   gap: 6px;
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid #d8d2c8;
-  border-radius: var(--radius-control);
+  border: 1px solid rgba(205, 199, 189, 0.66);
+  border-radius: 14px;
   background: transparent;
   color: #333;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 1000;
   box-shadow: none;
-}
-
-.pattern-pill:hover {
-  border-color: #8e8981;
-  background: rgba(5, 5, 5, 0.035);
 }
 
 .pattern-pill.active {
@@ -1042,7 +987,7 @@ input[type="range"]::-moz-range-thumb {
   gap: 3px;
   min-height: 35px;
   padding: 3px 8px;
-  border: 1px solid #e1ddd5;
+  border: 1px solid rgba(5, 5, 5, 0.06);
   border-radius: 11px;
   background: transparent;
   color: #666;
@@ -1068,12 +1013,12 @@ input[type="range"]::-moz-range-thumb {
   align-content: center;
   gap: 3px;
   padding: 3px 8px;
-  border: 1px solid #e1ddd5;
+  border: 1px solid rgba(5, 5, 5, 0.06);
   border-radius: 11px;
   background: transparent;
   color: #666;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   overflow: hidden;
 }
 
@@ -1173,12 +1118,7 @@ input[type="range"]::-moz-range-thumb {
   padding: 0 22px;
   font-size: 14px;
   letter-spacing: 0.03em;
-  box-shadow: 0 10px 22px rgba(5, 5, 5, 0.18);
-}
-
-#downloadBtn:hover {
-  background: #24221f;
-  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.16);
 }
 
 .preview-zoom-controls {
@@ -1191,10 +1131,10 @@ input[type="range"]::-moz-range-thumb {
   gap: 0;
   overflow: hidden;
   width: max-content;
-  border: 1px solid #d8d2c8;
-  border-radius: 14px;
-  background: #fffdf8;
-  box-shadow: 0 8px 18px rgba(83, 68, 46, 0.08);
+  border: 1px solid rgba(205, 199, 189, 0.62);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.05);
 }
 
 .preview-zoom-controls button {
@@ -1209,10 +1149,6 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: none;
   padding: 0 14px;
   font-size: 14px;
-}
-
-.preview-zoom-controls button:hover {
-  background: rgba(5, 5, 5, 0.055);
 }
 
 .zoom-symbol {
@@ -1247,8 +1183,7 @@ input[type="range"]::-moz-range-thumb {
   aspect-ratio: var(--paper-aspect, 1.4);
   flex: 0 0 auto;
   overflow: hidden;
-  border: 1px solid rgba(118, 104, 83, 0.08);
-  border-radius: 18px;
+  border-radius: 22px;
   background: transparent;
 }
 
@@ -1292,7 +1227,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .poster-shape {
-  display: none;
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .shape-purple {
@@ -1550,9 +1487,8 @@ input[type="range"]::-moz-range-thumb {
 
 @media (max-width: 1180px) {
   .app-shell {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
     overflow: visible;
-    overflow-x: clip;
   }
 
   .app-brand {
@@ -1565,28 +1501,15 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (max-width: 720px) {
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
   .app-shell {
-    gap: 14px;
-    width: 100%;
-    max-width: 100%;
-    padding: 10px;
+    gap: 18px;
+    padding: 14px;
   }
 
   .editor-panel,
   .preview-panel {
-    width: calc(100vw - 20px);
-    max-width: calc(100vw - 20px);
-    min-width: 0;
-    justify-self: stretch;
-    padding: 16px;
-    border-radius: 20px;
+    padding: 20px;
+    border-radius: 26px;
   }
 
   .app-brand {
@@ -1596,7 +1519,7 @@ input[type="range"]::-moz-range-thumb {
   .avatar-workbench,
   .text-controls,
   .paper-settings {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .copy-style-controls {
@@ -1619,7 +1542,7 @@ input[type="range"]::-moz-range-thumb {
   }
 
   h1 {
-    font-size: 48px;
+    font-size: 56px;
   }
 
   h2 {
@@ -1627,17 +1550,7 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .portrait-stage {
-    width: min(100%, 320px);
-    max-width: 320px;
-    justify-self: center;
-  }
-
-  .avatar-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .accessory-picker {
-    min-width: 0;
+    max-width: none;
   }
 
   #downloadBtn {
