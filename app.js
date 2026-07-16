@@ -10,7 +10,7 @@ const state = {
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
   copySize: 14,
-  copyFont: "handwriting",
+  copyFont: "rounded",
   copyColor: "#050505",
   copyOffsetX: 0,
   copyOffsetY: 0,
@@ -1062,7 +1062,7 @@ function createTileLayout(ctx, stickers, repeatStep, scaleRatio) {
 }
 
 function getCopyFont() {
-  return COPY_FONTS[state.copyFont] || COPY_FONTS.handwriting;
+  return COPY_FONTS[state.copyFont] || COPY_FONTS.rounded;
 }
 
 function drawCopySticker(ctx, sticker, x, y) {
