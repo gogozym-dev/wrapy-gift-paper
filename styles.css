@@ -18,6 +18,8 @@
     sans-serif;
   --hand-font: "Marker Felt", "Comic Sans MS", "Bradley Hand", "HanziPen SC", "Hannotate SC",
     "Kaiti SC", cursive;
+  --rounded-font: "Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "PingFang SC",
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
@@ -322,7 +324,7 @@ textarea {
 }
 
 #copyText {
-  font-family: var(--hand-font);
+  font-family: var(--rounded-font);
   font-size: 14px;
   font-weight: 800;
 }

@@ -41,7 +41,8 @@ const COPY_FONTS = {
   handwriting: { weight: 800, stack: HANDWRITING_FONT_STACK },
   rounded: {
     weight: 800,
-    stack: '"Hiragino Maru Gothic ProN", "PingFang SC", "Helvetica Neue", Arial, sans-serif',
+    stack:
+      '"Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "PingFang SC", "Helvetica Neue", Arial, sans-serif',
   },
   sans: { weight: 800, stack: SYSTEM_FONT_STACK },
   kaiti: { weight: 700, stack: '"Kaiti SC", "STKaiti", "KaiTi", serif' },
