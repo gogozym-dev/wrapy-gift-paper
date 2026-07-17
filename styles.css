@@ -14,6 +14,10 @@
   --accent: var(--purple);
   --accent-2: #467345;
   --shadow: 0 20px 56px rgba(5, 5, 5, 0.09);
+  --ui-surface: rgba(255, 255, 255, 0.84);
+  --ui-well: rgba(231, 230, 228, 0.72);
+  --ui-border: rgba(255, 255, 255, 0.9);
+  --ui-shadow: 0 2px 4px rgba(35, 31, 27, 0.04), 0 10px 24px rgba(35, 31, 27, 0.08);
   --system-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
     sans-serif;
   --hand-font: "Marker Felt", "Comic Sans MS", "Bradley Hand", "HanziPen SC", "Hannotate SC",
@@ -46,6 +50,30 @@ select {
 
 button {
   cursor: pointer;
+}
+
+button,
+input,
+select,
+textarea {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #050505;
+  outline-offset: 2px;
 }
 
 .ui-icon {
@@ -98,12 +126,13 @@ button {
   z-index: 1;
   min-width: 0;
   overflow: hidden;
-  background: rgba(255, 253, 248, 0.78);
-  border: 1px solid rgba(203, 199, 190, 0.58);
+  background: rgba(255, 253, 248, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.86);
   box-shadow:
-    0 24px 72px rgba(80, 67, 50, 0.08),
+    0 24px 72px rgba(80, 67, 50, 0.07),
+    0 0 0 1px rgba(203, 199, 190, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
 }
 
 .editor-panel {
@@ -714,23 +743,34 @@ select {
   justify-content: center;
   gap: 8px;
   min-height: 44px;
-  border: 1px solid rgba(205, 199, 189, 0.62);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--ui-border);
+  border-radius: 14px;
+  background: var(--ui-surface);
   color: #181818;
   font-size: 14px;
-  font-weight: 1000;
-  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.05);
+  font-weight: 800;
+  box-shadow: var(--ui-shadow), inset 0 0 0 1px rgba(205, 199, 189, 0.42);
 }
 
 .stage-upload-button {
-  background: rgba(255, 255, 255, 0.76);
+  background: var(--ui-surface);
   color: #181818;
+}
+
+.stage-upload-button:hover,
+.add-button:hover:not(:disabled) {
+  background: #fff;
+  box-shadow:
+    0 3px 5px rgba(35, 31, 27, 0.05),
+    0 12px 26px rgba(35, 31, 27, 0.1),
+    inset 0 0 0 1px rgba(205, 199, 189, 0.48);
+  transform: translateY(-1px);
 }
 
 .add-button.active {
   background: #050505;
   color: #fff;
+  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.18);
 }
 
 .add-button:disabled,
@@ -842,8 +882,14 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 999px;
   overflow: hidden;
   background: conic-gradient(#ff6b6b, #ffd93d, #6bff95, #55c7f1, #8f55ff, #ff6bcb, #ff6b6b);
-  box-shadow: none;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.9),
+    0 6px 14px rgba(35, 31, 27, 0.1);
   cursor: pointer;
+}
+
+.custom-color-trigger:hover {
+  transform: translateY(-1px) scale(1.03);
 }
 
 .custom-color-menu {
@@ -853,10 +899,14 @@ input[type="range"]::-moz-range-thumb {
   display: none;
   width: 188px;
   padding: 10px;
-  border: 1px solid rgba(205, 199, 189, 0.66);
-  border-radius: 14px;
-  background: #fffdf8;
-  box-shadow: 0 10px 24px rgba(5, 5, 5, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 2px 4px rgba(35, 31, 27, 0.04),
+    0 18px 38px rgba(35, 31, 27, 0.14),
+    inset 0 0 0 1px rgba(205, 199, 189, 0.34);
+  backdrop-filter: blur(18px);
   z-index: 200;
   overflow: hidden;
   transform: none;
@@ -881,7 +931,7 @@ input[type="range"]::-moz-range-thumb {
   padding: 0 16px;
   border: 0;
   border-radius: 10px;
-  background: #fffdf8;
+  background: transparent;
   color: #111;
   font-size: 14px;
   font-weight: 400;
@@ -894,7 +944,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .custom-color-option:hover {
-  background: rgba(5, 5, 5, 0.06);
+  background: rgba(5, 5, 5, 0.055);
 }
 
 .pattern-options {
@@ -904,6 +954,11 @@ input[type="range"]::-moz-range-thumb {
   min-width: 0;
   max-width: 100%;
   align-items: center;
+  border-radius: 16px;
+  background: var(--ui-well);
+  box-shadow:
+    0 0 0 4px var(--ui-well),
+    inset 0 1px 1px rgba(35, 31, 27, 0.035);
 }
 
 .color-section .section-title strong,
@@ -917,21 +972,25 @@ input[type="range"]::-moz-range-thumb {
   gap: 6px;
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid rgba(205, 199, 189, 0.66);
-  border-radius: 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
   background: transparent;
   color: #333;
   font-size: 14px;
-  font-weight: 1000;
+  font-weight: 800;
   box-shadow: none;
+}
+
+.pattern-pill:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .pattern-pill.active {
   border-color: #050505;
-  border-width: 2px;
-  background: transparent;
+  border-width: 1px;
+  background: rgba(255, 255, 255, 0.96);
   color: #111;
-  box-shadow: none;
+  box-shadow: 0 5px 12px rgba(35, 31, 27, 0.1);
 }
 
 .pattern-icon {
@@ -980,6 +1039,9 @@ input[type="range"]::-moz-range-thumb {
 .text-controls textarea {
   grid-column: auto;
   min-height: 78px;
+  border-color: var(--ui-border);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow), inset 0 0 0 1px rgba(205, 199, 189, 0.34);
 }
 
 .copy-size-control {
@@ -989,7 +1051,7 @@ input[type="range"]::-moz-range-thumb {
   gap: 3px;
   min-height: 35px;
   padding: 3px 8px;
-  border: 1px solid rgba(5, 5, 5, 0.06);
+  border: 0;
   border-radius: 11px;
   background: transparent;
   color: #666;
@@ -1006,6 +1068,11 @@ input[type="range"]::-moz-range-thumb {
   gap: 6px;
   min-width: 0;
   margin-top: 0;
+  border-radius: 13px;
+  background: var(--ui-well);
+  box-shadow:
+    0 0 0 4px var(--ui-well),
+    inset 0 1px 1px rgba(35, 31, 27, 0.035);
 }
 
 .copy-option {
@@ -1015,7 +1082,7 @@ input[type="range"]::-moz-range-thumb {
   align-content: center;
   gap: 3px;
   padding: 3px 8px;
-  border: 1px solid rgba(5, 5, 5, 0.06);
+  border: 0;
   border-radius: 11px;
   background: transparent;
   color: #666;
@@ -1108,6 +1175,17 @@ input[type="range"]::-moz-range-thumb {
   align-items: center;
   min-width: 0;
   max-width: 100%;
+  border-radius: 13px;
+  background: var(--ui-well);
+  box-shadow:
+    0 0 0 4px var(--ui-well),
+    inset 0 1px 1px rgba(35, 31, 27, 0.035);
+}
+
+.paper-settings .field-inline {
+  border-color: var(--ui-border);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow), inset 0 0 0 1px rgba(205, 199, 189, 0.3);
 }
 
 #downloadBtn {
@@ -1120,7 +1198,15 @@ input[type="range"]::-moz-range-thumb {
   padding: 0 22px;
   font-size: 14px;
   letter-spacing: 0.03em;
-  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.16);
+  box-shadow:
+    0 2px 3px rgba(5, 5, 5, 0.08),
+    0 12px 26px rgba(5, 5, 5, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+#downloadBtn:hover {
+  background: #202020;
+  transform: translateY(-1px);
 }
 
 .preview-zoom-controls {
@@ -1133,10 +1219,14 @@ input[type="range"]::-moz-range-thumb {
   gap: 0;
   overflow: hidden;
   width: max-content;
-  border: 1px solid rgba(205, 199, 189, 0.62);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.68);
-  box-shadow: 0 8px 18px rgba(5, 5, 5, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  background: rgba(238, 238, 239, 0.86);
+  box-shadow:
+    0 2px 4px rgba(35, 31, 27, 0.04),
+    0 12px 26px rgba(35, 31, 27, 0.1),
+    inset 0 0 0 1px rgba(205, 199, 189, 0.26);
+  backdrop-filter: blur(16px);
 }
 
 .preview-zoom-controls button {
@@ -1151,6 +1241,11 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: none;
   padding: 0 14px;
   font-size: 14px;
+}
+
+.preview-zoom-controls button:hover {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
 }
 
 .zoom-symbol {
@@ -1168,10 +1263,10 @@ input[type="range"]::-moz-range-thumb {
   min-width: 56px;
   min-height: 42px;
   place-items: center;
-  border-right: 1px solid rgba(205, 199, 189, 0.62);
-  border-left: 1px solid rgba(205, 199, 189, 0.62);
+  border-right: 1px solid rgba(205, 199, 189, 0.36);
+  border-left: 1px solid rgba(205, 199, 189, 0.36);
   border-radius: 0;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.74);
   color: var(--ink);
   font-size: 14px;
   font-weight: 900;
