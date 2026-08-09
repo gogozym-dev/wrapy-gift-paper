@@ -64,7 +64,7 @@ textarea {
     transform 160ms ease;
 }
 
-button:active:not(:disabled) {
+button:active:not(:disabled):not(.portrait-transform):not(.placed-accessory) {
   transform: translateY(1px);
 }
 
@@ -556,6 +556,9 @@ select {
   user-select: none;
   pointer-events: auto;
   outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .portrait-transform {
@@ -572,6 +575,9 @@ select {
   cursor: move;
   transform: translate(-50%, -50%) rotate(var(--rotation));
   touch-action: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .portrait-transform.is-hidden {
