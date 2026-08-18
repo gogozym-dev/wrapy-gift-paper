@@ -773,10 +773,12 @@ select {
   transform: translateY(-1px);
 }
 
-.add-button.active {
+.add-button.active,
+.add-button.active:hover:not(:disabled) {
   background: #050505;
   color: #fff;
   box-shadow: 0 8px 18px rgba(5, 5, 5, 0.18);
+  transform: none;
 }
 
 .add-button:disabled,
@@ -1633,6 +1635,18 @@ input[type="range"]::-moz-range-thumb {
 
   .portrait-stage {
     max-width: none;
+  }
+
+  .accessory-dock {
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin-top: 8px;
+  }
+
+  .avatar-actions .accessory {
+    width: 44px;
+    height: 44px;
   }
 
   #downloadBtn {
