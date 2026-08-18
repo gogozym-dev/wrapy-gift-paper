@@ -1,5 +1,6 @@
 const DEFAULT_REPEAT_DENSITY = 132;
 const DEFAULT_PAPER_IMAGE_SCALE = 0.58;
+const DRAG_START_THRESHOLD = 4;
 
 const state = {
   baseColor: "#fbfaed",
@@ -525,7 +526,9 @@ function updateControls() {
   accessoryDock.classList.toggle("is-open", state.accessoryDockOpen);
   [copySize, copyOffsetX, copyOffsetY, repeatDensity, paperImageScale].forEach(updateRangeFill);
   const spec = getPrintSpec();
-  printMeta.textContent = `${spec.label} · 300 DPI · ${spec.pixels.width} × ${spec.pixels.height} px`;
+  if (printMeta) {
+    printMeta.textContent = `${spec.label} · 300 DPI · ${spec.pixels.width} × ${spec.pixels.height} px`;
+  }
   updatePreviewZoom();
 }
 
@@ -814,20 +817,35 @@ function startDrag(event, id) {
   state.selectedTarget = "accessory";
   state.selectedAccessoryId = id;
   const item = state.accessories.find((candidate) => candidate.id === id);
+  const pointerId = event.pointerId;
+  const startClientX = event.clientX;
+  const startClientY = event.clientY;
+  const startX = item.x;
+  const startY = item.y;
+  let isDragging = false;
   renderAccessories();
 
   const rect = accessoryLayer.getBoundingClientRect();
   const move = (moveEvent) => {
-    item.x = clamp(((moveEvent.clientX - rect.left) / rect.width) * 100, 3, 97);
-    item.y = clamp(((moveEvent.clientY - rect.top) / rect.height) * 100, 3, 97);
+    if (moveEvent.pointerId !== pointerId) return;
+    const deltaX = moveEvent.clientX - startClientX;
+    const deltaY = moveEvent.clientY - startClientY;
+    if (!isDragging && Math.hypot(deltaX, deltaY) < DRAG_START_THRESHOLD) return;
+
+    isDragging = true;
+    item.x = clamp(startX + (deltaX / rect.width) * 100, 3, 97);
+    item.y = clamp(startY + (deltaY / rect.height) * 100, 3, 97);
     render();
   };
-  const stop = () => {
+  const stop = (stopEvent) => {
+    if (stopEvent.pointerId !== pointerId) return;
     window.removeEventListener("pointermove", move);
     window.removeEventListener("pointerup", stop);
+    window.removeEventListener("pointercancel", stop);
   };
   window.addEventListener("pointermove", move);
   window.addEventListener("pointerup", stop);
+  window.addEventListener("pointercancel", stop);
 }
 
 function startPortraitDrag(event) {
@@ -835,20 +853,35 @@ function startPortraitDrag(event) {
   event.preventDefault();
   state.selectedTarget = "portrait";
   state.selectedAccessoryId = null;
+  const pointerId = event.pointerId;
+  const startClientX = event.clientX;
+  const startClientY = event.clientY;
+  const startX = state.portrait.x;
+  const startY = state.portrait.y;
+  let isDragging = false;
   render();
 
   const rect = accessoryLayer.getBoundingClientRect();
   const move = (moveEvent) => {
-    state.portrait.x = clamp(((moveEvent.clientX - rect.left) / rect.width) * 100, 3, 97);
-    state.portrait.y = clamp(((moveEvent.clientY - rect.top) / rect.height) * 100, 3, 97);
+    if (moveEvent.pointerId !== pointerId) return;
+    const deltaX = moveEvent.clientX - startClientX;
+    const deltaY = moveEvent.clientY - startClientY;
+    if (!isDragging && Math.hypot(deltaX, deltaY) < DRAG_START_THRESHOLD) return;
+
+    isDragging = true;
+    state.portrait.x = clamp(startX + (deltaX / rect.width) * 100, 3, 97);
+    state.portrait.y = clamp(startY + (deltaY / rect.height) * 100, 3, 97);
     render();
   };
-  const stop = () => {
+  const stop = (stopEvent) => {
+    if (stopEvent.pointerId !== pointerId) return;
     window.removeEventListener("pointermove", move);
     window.removeEventListener("pointerup", stop);
+    window.removeEventListener("pointercancel", stop);
   };
   window.addEventListener("pointermove", move);
   window.addEventListener("pointerup", stop);
+  window.addEventListener("pointercancel", stop);
 }
 
 function startPortraitResize(event) {
