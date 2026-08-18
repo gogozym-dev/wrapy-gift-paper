@@ -1639,6 +1639,58 @@ input[type="range"]::-moz-range-thumb {
     max-width: none;
   }
 
+  .color-section {
+    z-index: 120;
+  }
+
+  .color-row {
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow: visible;
+  }
+
+  .color-row .swatches {
+    display: grid;
+    flex: 1 1 auto;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .color-row .swatch {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0;
+  }
+
+  .color-row .swatch::before {
+    width: min(38px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .color-row .custom-color-picker {
+    flex: 0 0 38px;
+    z-index: 300;
+  }
+
+  .color-row .custom-color-trigger {
+    width: 38px;
+    height: 38px;
+  }
+
+  .color-row .custom-color-menu {
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    width: min(188px, calc(100vw - 68px));
+    border-color: rgba(205, 199, 189, 0.72);
+    background: #fffdf8;
+    backdrop-filter: none;
+    z-index: 400;
+  }
+
   .accessory-dock {
     position: static;
     width: 100%;
