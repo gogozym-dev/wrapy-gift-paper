@@ -890,10 +890,12 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 999px;
   overflow: hidden;
   background: conic-gradient(#ff6b6b, #ffd93d, #6bff95, #55c7f1, #8f55ff, #ff6bcb, #ff6b6b);
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.9),
-    0 6px 14px rgba(35, 31, 27, 0.1);
+  box-shadow: none;
   cursor: pointer;
+}
+
+.custom-color-trigger.active {
+  box-shadow: 0 0 0 2px #050505;
 }
 
 .custom-color-trigger:hover {
