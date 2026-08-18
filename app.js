@@ -75,19 +75,54 @@ const ICONS = {
 };
 const accessoryAssets = [
   {
-    id: "huaban-6995442534",
+    id: "accessory-01",
     name: "配饰 1",
-    src: "./assets/accessories/huaban-6995442534.webp",
+    src: "./assets/accessories/accessory-01.png",
   },
   {
-    id: "huaban-6996643812",
+    id: "accessory-02",
     name: "配饰 2",
-    src: "./assets/accessories/huaban-6996643812.webp",
+    src: "./assets/accessories/accessory-02.png",
   },
   {
-    id: "huaban-6996487707",
+    id: "accessory-03",
     name: "配饰 3",
-    src: "./assets/accessories/huaban-6996487707.webp",
+    src: "./assets/accessories/accessory-03.png",
+  },
+  {
+    id: "accessory-04",
+    name: "配饰 4",
+    src: "./assets/accessories/accessory-04.png",
+  },
+  {
+    id: "accessory-05",
+    name: "配饰 5",
+    src: "./assets/accessories/accessory-05.png",
+  },
+  {
+    id: "accessory-06",
+    name: "配饰 6",
+    src: "./assets/accessories/accessory-06.png",
+  },
+  {
+    id: "accessory-07",
+    name: "配饰 7",
+    src: "./assets/accessories/accessory-07.png",
+  },
+  {
+    id: "accessory-08",
+    name: "配饰 8",
+    src: "./assets/accessories/accessory-08.png",
+  },
+  {
+    id: "accessory-09",
+    name: "配饰 9",
+    src: "./assets/accessories/accessory-09.png",
+  },
+  {
+    id: "accessory-10",
+    name: "配饰 10",
+    src: "./assets/accessories/accessory-10.png",
   },
 ];
 const accessoryImageMap = new Map();
