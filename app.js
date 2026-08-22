@@ -1,10 +1,13 @@
-const DEFAULT_REPEAT_DENSITY = 132;
-const DEFAULT_PAPER_IMAGE_SCALE = 0.58;
+const DEFAULT_REPEAT_DENSITY = 158;
+const DEFAULT_PAPER_IMAGE_SCALE = 0.812;
+const PAPER_IMAGE_SIZE_BASE = 132;
+const DEFAULT_BASE_COLOR = "#fafcff";
+const DEFAULT_PATTERN_COLOR = "#24c8ff";
 const DRAG_START_THRESHOLD = 4;
 
 const state = {
-  baseColor: "#fbfaed",
-  patternColor: null,
+  baseColor: DEFAULT_BASE_COLOR,
+  patternColor: DEFAULT_PATTERN_COLOR,
   pattern: "stripe",
   image: null,
   portraitFrame: "none",
@@ -13,7 +16,7 @@ const state = {
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
   copySize: 14,
-  copyFont: "rounded",
+  copyFont: "fredoka",
   copyColor: "#050505",
   copyOffsetX: 0,
   copyOffsetY: 0,
@@ -24,12 +27,13 @@ const state = {
   selectedTarget: "portrait",
   selectedAccessoryId: null,
   accessoryDockOpen: false,
+  fontModalOpen: false,
   pendingAccessoryAssetId: null,
   accessories: [],
 };
 
 const colors = [
-  { name: "米白", value: "#fbfaed" },
+  { name: "冰白", value: DEFAULT_BASE_COLOR },
   { name: "樱粉", value: "#fae3e4" },
   { name: "鼠尾草", value: "#edf2df" },
   { name: "雾蓝", value: "#ebf1f7" },
@@ -38,17 +42,27 @@ const colors = [
 ];
 const PREVIEW_BASE_WIDTH = 1120;
 const SYSTEM_FONT_STACK = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif';
-const HANDWRITING_FONT_STACK =
-  '"Marker Felt", "Comic Sans MS", "Bradley Hand", "HanziPen SC", "Hannotate SC", "Kaiti SC", cursive';
+const COPY_FONT_FALLBACK = '"PingFang SC", "Helvetica Neue", Arial, sans-serif';
 const COPY_FONTS = {
-  handwriting: { weight: 800, stack: HANDWRITING_FONT_STACK },
-  rounded: {
-    weight: 800,
-    stack:
-      '"Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "PingFang SC", "Helvetica Neue", Arial, sans-serif',
+  fredoka: { label: "Fredoka", family: '"Fredoka"', weight: 600, stack: `"Fredoka", ${COPY_FONT_FALLBACK}` },
+  dynapuff: {
+    label: "DynaPuff",
+    family: '"DynaPuff"',
+    weight: 600,
+    stack: `"DynaPuff", ${COPY_FONT_FALLBACK}`,
   },
-  sans: { weight: 800, stack: SYSTEM_FONT_STACK },
-  kaiti: { weight: 700, stack: '"Kaiti SC", "STKaiti", "KaiTi", serif' },
+  "sour-gummy": {
+    label: "Sour Gummy",
+    family: '"Sour Gummy"',
+    weight: 600,
+    stack: `"Sour Gummy", ${COPY_FONT_FALLBACK}`,
+  },
+  "baloo-2": {
+    label: "Baloo 2",
+    family: '"Baloo 2"',
+    weight: 600,
+    stack: `"Baloo 2", ${COPY_FONT_FALLBACK}`,
+  },
 };
 const ICONS = {
   "accessory-add":
@@ -56,6 +70,7 @@ const ICONS = {
   "avatar-upload":
     '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="10" r="2.5"/><path d="M7.8 17a4.8 4.8 0 0 1 8.4 0"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
+  "chevron-down": '<path d="m7 10 5 5 5-5"/>',
   download: '<path d="M12 4v10"/><path d="m8 10 4 4 4-4"/><path d="M5 17v1.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V17"/>',
   "grid-3x3":
     '<rect width="15" height="15" x="4.5" y="4.5" rx="1.8"/><path d="M4.5 9.5h15"/><path d="M4.5 14.5h15"/><path d="M9.5 4.5v15"/><path d="M14.5 4.5v15"/>',
@@ -126,8 +141,12 @@ const accessoryAssets = [
     name: "配饰 10",
     src: "./assets/accessories/accessory-10.png",
   },
-];
+].map((asset) => ({
+  ...asset,
+  previewSrc: asset.src.replace("/accessories/", "/accessories/thumbs/"),
+}));
 const accessoryImageMap = new Map();
+const accessoryLoadPromiseMap = new Map();
 const accessoryTrimMap = new Map();
 
 const personUpload = document.querySelector("#personUpload");
@@ -145,6 +164,9 @@ const paperSizeSelect = document.querySelector("#paperSizeSelect");
 const copyText = document.querySelector("#copyText");
 const copySize = document.querySelector("#copySize");
 const copyFont = document.querySelector("#copyFont");
+const copyFontTrigger = document.querySelector("#copyFontTrigger");
+const copyFontLabel = document.querySelector("#copyFontLabel");
+const copyFontButtons = document.querySelectorAll("[data-copy-font]");
 const copyColor = document.querySelector("#copyColor");
 const copyOffsetX = document.querySelector("#copyOffsetX");
 const copyOffsetY = document.querySelector("#copyOffsetY");
@@ -164,6 +186,8 @@ const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
 const accessoryModal = document.querySelector("#accessoryModal");
 const accessoryModalClose = document.querySelector("#accessoryModalClose");
+const fontModal = document.querySelector("#fontModal");
+const fontModalClose = document.querySelector("#fontModalClose");
 const portraitFrameButtons = document.querySelectorAll("[data-portrait-frame]");
 const portraitFrameColorControl = document.querySelector("#frameColorControl");
 const portraitFrameColor = document.querySelector("#frameColor");
@@ -176,7 +200,6 @@ const printMeta = document.querySelector("#printMeta");
 const zoomValue = document.querySelector("#zoomValue");
 
 function init() {
-  preloadAccessoryAssets();
   renderAccessoryDock();
   renderIcons();
 
@@ -200,6 +223,7 @@ function init() {
 
   bindEvents();
   render();
+  ensureAllCopyFontsLoaded().then(render);
   setupPreviewHeightSync();
 }
 
@@ -309,9 +333,20 @@ function bindEvents() {
     updateRangeFill(event.target);
     render();
   });
-  copyFont.addEventListener("change", (event) => {
-    state.copyFont = event.target.value;
+  copyFontTrigger.addEventListener("click", () => {
+    state.fontModalOpen = true;
     render();
+  });
+  copyFontButtons.forEach((button) => {
+    button.addEventListener("click", () => selectCopyFont(button.dataset.copyFont));
+  });
+  fontModalClose.addEventListener("click", closeFontModal);
+  fontModal.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeFontModal();
+  });
+  fontModal.addEventListener("click", (event) => {
+    if (event.target === fontModal) closeFontModal();
   });
   copyColor.addEventListener("input", (event) => {
     state.copyColor = event.target.value;
@@ -364,13 +399,22 @@ function bindEvents() {
     if (event.target === accessoryModal) closeAccessoryModal();
   });
 
-  document.querySelector("#downloadBtn").addEventListener("click", () => {
-    const exportCanvas = createPrintCanvas();
-    const link = document.createElement("a");
-    const spec = getPrintSpec();
-    link.download = `gift-wrap-${spec.label.replaceAll(" ", "").replace("×", "x")}-300dpi.png`;
-    link.href = exportCanvas.toDataURL("image/png");
-    link.click();
+  document.querySelector("#downloadBtn").addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+    try {
+      await ensureCopyFontLoaded();
+      const exportCanvas = createPrintCanvas();
+      const link = document.createElement("a");
+      const spec = getPrintSpec();
+      link.download = `gift-wrap-${spec.label.replaceAll(" ", "").replace("×", "x")}-300dpi.png`;
+      link.href = exportCanvas.toDataURL("image/png");
+      link.click();
+    } finally {
+      button.disabled = false;
+      button.removeAttribute("aria-busy");
+    }
   });
 }
 
@@ -378,6 +422,21 @@ function closeAccessoryModal() {
   state.accessoryDockOpen = false;
   render();
   addAccessoryButton.focus();
+}
+
+function selectCopyFont(fontKey) {
+  if (!COPY_FONTS[fontKey]) return;
+  state.copyFont = fontKey;
+  state.fontModalOpen = false;
+  render();
+  ensureCopyFontLoaded().then(render);
+  copyFontTrigger.focus();
+}
+
+function closeFontModal() {
+  state.fontModalOpen = false;
+  syncFontModal();
+  copyFontTrigger.focus();
 }
 
 function handleKeyboardShortcuts(event) {
@@ -436,18 +495,6 @@ function isTypingTarget(target) {
   return ["INPUT", "SELECT", "TEXTAREA"].includes(target?.tagName);
 }
 
-function preloadAccessoryAssets() {
-  accessoryAssets.forEach((asset) => {
-    const image = new Image();
-    image.onload = () => {
-      measureAccessoryTrim(asset.id, image);
-      render();
-    };
-    image.src = asset.src;
-    accessoryImageMap.set(asset.id, image);
-  });
-}
-
 function renderAccessoryDock() {
   accessoryDock.innerHTML = "";
   accessoryAssets.forEach((asset) => {
@@ -456,11 +503,23 @@ function renderAccessoryDock() {
     button.type = "button";
     button.dataset.assetId = asset.id;
     button.title = asset.name;
-    button.innerHTML = `<img src="${asset.src}" alt="${asset.name}" />`;
+    button.innerHTML = `<img src="${asset.previewSrc || asset.src}" alt="${asset.name}" width="240" height="240" loading="lazy" decoding="async" />`;
+    const previewImage = button.querySelector("img");
+    previewImage.addEventListener("load", () => button.classList.remove("is-error"));
+    previewImage.addEventListener("error", () => {
+      if (!previewImage.dataset.usedFallback && asset.previewSrc && asset.previewSrc !== asset.src) {
+        previewImage.dataset.usedFallback = "true";
+        previewImage.src = asset.src;
+        return;
+      }
+      previewImage.hidden = true;
+      button.classList.add("is-error");
+      button.title = "加载失败，点击重试";
+    });
     button.classList.toggle("active", asset.id === state.selectedAssetId);
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       state.selectedAssetId = asset.id;
-      addAccessoryFromAsset(asset.id);
+      await addAccessoryFromAsset(asset.id, button);
     });
     accessoryDock.append(button);
   });
@@ -475,15 +534,65 @@ function renderAccessoryDock() {
   accessoryDock.append(uploadButton);
 }
 
-function addAccessoryFromAsset(assetId) {
+async function addAccessoryFromAsset(assetId, button) {
   if (!state.image) {
     return;
   }
 
-  insertAccessory(assetId);
-  state.accessoryDockOpen = false;
-  render();
-  addAccessoryButton.focus();
+  button?.classList.remove("is-error");
+  button?.classList.add("is-loading");
+  button?.setAttribute("aria-busy", "true");
+  if (button) button.disabled = true;
+
+  try {
+    await loadAccessoryAsset(assetId);
+    insertAccessory(assetId);
+    state.accessoryDockOpen = false;
+    render();
+    addAccessoryButton.focus();
+  } catch {
+    button?.classList.add("is-error");
+    if (button) {
+      button.disabled = false;
+      button.title = "加载失败，点击重试";
+    }
+  } finally {
+    button?.classList.remove("is-loading");
+    button?.removeAttribute("aria-busy");
+  }
+}
+
+function loadAccessoryAsset(assetId) {
+  const cachedImage = accessoryImageMap.get(assetId);
+  if (cachedImage?.complete && cachedImage.naturalWidth) {
+    return Promise.resolve(cachedImage);
+  }
+
+  const pendingLoad = accessoryLoadPromiseMap.get(assetId);
+  if (pendingLoad) return pendingLoad;
+
+  const asset = accessoryAssets.find((candidate) => candidate.id === assetId);
+  if (!asset) return Promise.reject(new Error(`Unknown accessory: ${assetId}`));
+
+  const loadPromise = new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => {
+      accessoryImageMap.set(assetId, image);
+      measureAccessoryTrim(assetId, image);
+      accessoryLoadPromiseMap.delete(assetId);
+      resolve(image);
+    };
+    image.onerror = () => {
+      accessoryImageMap.delete(assetId);
+      accessoryLoadPromiseMap.delete(assetId);
+      reject(new Error(`Failed to load accessory: ${asset.src}`));
+    };
+    image.src = asset.src;
+  });
+
+  accessoryLoadPromiseMap.set(assetId, loadPromise);
+  return loadPromise;
 }
 
 function handleAccessoryUpload(event) {
@@ -581,8 +690,15 @@ function updateControls() {
   });
   patternSelect.value = state.pattern;
   copyFont.value = state.copyFont;
+  copyFontLabel.textContent = getCopyFont().label;
+  copyFontButtons.forEach((button) => {
+    const isActive = button.dataset.copyFont === state.copyFont;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
   copyColor.value = state.copyColor;
   copyText.style.fontFamily = getCopyFont().stack;
+  copyText.style.fontWeight = getCopyFont().weight;
   copyText.style.color = state.copyColor;
   portraitFrameButtons.forEach((button) => {
     const isActive = button.dataset.portraitFrame === state.portraitFrame;
@@ -605,6 +721,7 @@ function updateControls() {
   }
   addAccessoryButton.classList.toggle("active", state.accessoryDockOpen);
   syncAccessoryModal();
+  syncFontModal();
   [copySize, copyOffsetX, copyOffsetY, repeatDensity, paperImageScale].forEach(updateRangeFill);
   const spec = getPrintSpec();
   if (printMeta) {
@@ -622,6 +739,17 @@ function syncAccessoryModal() {
     accessoryModal.close();
   }
   document.body.classList.toggle("accessory-modal-open", shouldOpen);
+}
+
+function syncFontModal() {
+  if (state.fontModalOpen && !fontModal.open) {
+    fontModal.showModal();
+    fontModalClose.focus();
+  } else if (!state.fontModalOpen && fontModal.open) {
+    fontModal.close();
+  }
+  copyFontTrigger.setAttribute("aria-expanded", String(state.fontModalOpen));
+  document.body.classList.toggle("font-modal-open", state.fontModalOpen);
 }
 
 function openColorInput(input) {
@@ -917,7 +1045,7 @@ function renderAccessories() {
     const asset = accessoryAssets.find((candidate) => candidate.id === item.assetId);
     if (!asset) return;
     const displayBox = getAccessoryDisplayBox(item.assetId, item.size);
-    button.innerHTML = `<span class="accessory-image-frame"><img src="${asset.src}" alt="${asset.name}" /></span>`;
+    button.innerHTML = `<span class="accessory-image-frame"><img src="${asset.previewSrc || asset.src}" alt="${asset.name}" decoding="async" /></span>`;
     button.style.left = `${item.x}%`;
     button.style.top = `${item.y}%`;
     button.style.setProperty("--size", `${item.size}px`);
@@ -1261,7 +1389,9 @@ function createPrintCanvas() {
 function drawPaperToCanvas(canvas, ctx, scaleRatio) {
   drawPattern(ctx, canvas.width, canvas.height, scaleRatio);
   const repeatStep = getRepeatStep(scaleRatio);
-  const portraitSize = state.image ? repeatStep * state.paperImageScale : repeatStep * 0.44;
+  const portraitSize = state.image
+    ? PAPER_IMAGE_SIZE_BASE * state.paperImageScale * scaleRatio
+    : repeatStep * 0.44;
   const portrait = makePortraitTile();
   const stickers = getCopyStickers();
   const tileLayout = createTileLayout(ctx, stickers, repeatStep, scaleRatio);
@@ -1354,7 +1484,21 @@ function createTileLayout(ctx, stickers, repeatStep, scaleRatio) {
 }
 
 function getCopyFont() {
-  return COPY_FONTS[state.copyFont] || COPY_FONTS.rounded;
+  return COPY_FONTS[state.copyFont] || COPY_FONTS.fredoka;
+}
+
+async function ensureCopyFontLoaded(fontKey = state.copyFont) {
+  if (!document.fonts?.load) return;
+  const font = COPY_FONTS[fontKey] || COPY_FONTS.fredoka;
+  try {
+    await document.fonts.load(`${font.weight} 32px ${font.family}`, state.copyText || "happy birthday");
+  } catch {
+    // Keep the system fallback usable if a font asset cannot be loaded.
+  }
+}
+
+async function ensureAllCopyFontsLoaded() {
+  await Promise.all(Object.keys(COPY_FONTS).map((fontKey) => ensureCopyFontLoaded(fontKey)));
 }
 
 function drawCopySticker(ctx, sticker, x, y) {

@@ -17,7 +17,7 @@
       content="上传头像、添加配饰，自定义颜色、纹路与文案，生成可高清打印的礼物包装纸。"
     />
     <meta property="og:url" content="https://gogozym-dev.github.io/wrapy-gift-paper/" />
-    <link rel="stylesheet" href="./styles.css?v=20260822-6" />
+    <link rel="stylesheet" href="./styles.css?v=20260822-10" />
   </head>
   <body>
     <main class="app-shell">
@@ -99,8 +99,8 @@
                 <button class="custom-color-option" id="baseColorOption" type="button">自定义底色</button>
                 <button class="custom-color-option" id="patternColorOption" type="button">自定义纹路颜色</button>
               </div>
-              <input id="customColor" class="visually-hidden" type="color" value="#fbfaed" aria-label="自定义底色" />
-              <input id="patternCustomColor" class="visually-hidden" type="color" value="#d8d2c8" aria-label="自定义纹路色" />
+              <input id="customColor" class="visually-hidden" type="color" value="#fafcff" aria-label="自定义底色" />
+              <input id="patternCustomColor" class="visually-hidden" type="color" value="#24c8ff" aria-label="自定义纹路色" />
             </div>
           </div>
         </div>
@@ -146,15 +146,26 @@
           <div class="text-controls">
             <textarea id="copyText" rows="3">happy brithday</textarea>
             <div class="copy-style-controls">
-              <label class="copy-option copy-font-control">
+              <div class="copy-option copy-font-control">
                 <span>字体</span>
-                <select id="copyFont">
-                  <option value="rounded" selected>圆体</option>
-                  <option value="sans">黑体</option>
-                  <option value="kaiti">楷体</option>
-                  <option value="handwriting">手写体</option>
+                <button
+                  class="copy-font-trigger"
+                  id="copyFontTrigger"
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-controls="fontModal"
+                  aria-expanded="false"
+                >
+                  <span id="copyFontLabel">Fredoka</span>
+                  <span class="ui-icon" data-icon="chevron-down" aria-hidden="true"></span>
+                </button>
+                <select id="copyFont" class="visually-hidden" tabindex="-1" aria-hidden="true">
+                  <option value="fredoka" selected>Fredoka</option>
+                  <option value="dynapuff">DynaPuff</option>
+                  <option value="sour-gummy">Sour Gummy</option>
+                  <option value="baloo-2">Baloo 2</option>
                 </select>
-              </label>
+              </div>
               <label class="copy-option copy-color-control">
                 <span>字体颜色</span>
                 <input id="copyColor" type="color" value="#050505" aria-label="字体颜色" />
@@ -197,11 +208,11 @@
             </label>
             <label class="slider-row">
               <span>重复密度</span>
-              <input id="repeatDensity" type="range" min="90" max="190" value="132" />
+              <input id="repeatDensity" type="range" min="90" max="190" value="158" />
             </label>
             <label class="slider-row">
               <span>图案大小</span>
-              <input id="paperImageScale" type="range" min="38" max="110" value="58" />
+              <input id="paperImageScale" type="range" min="38" max="110" step="0.1" value="81.2" />
             </label>
           </div>
         </div>
@@ -254,6 +265,35 @@
       </div>
     </dialog>
 
-    <script src="./app.js?v=20260822-5"></script>
+    <dialog class="accessory-modal font-modal" id="fontModal" aria-labelledby="fontModalTitle">
+      <div class="accessory-modal-card font-modal-card">
+        <div class="accessory-modal-head">
+          <h3 id="fontModalTitle">选择字体</h3>
+          <button class="accessory-modal-close" id="fontModalClose" type="button" aria-label="关闭字体选择">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="font-options" aria-label="字体选择">
+          <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
+            <span class="font-option-name">Fredoka</span>
+            <span class="font-option-preview font-preview-fredoka">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
+            <span class="font-option-name">DynaPuff</span>
+            <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
+            <span class="font-option-name">Sour Gummy</span>
+            <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
+            <span class="font-option-name">Baloo 2</span>
+            <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./app.js?v=20260822-10"></script>
   </body>
 </html>
