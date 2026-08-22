@@ -479,6 +479,60 @@ select {
   gap: 8px;
 }
 
+.avatar-frame-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.avatar-frame-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 7px;
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  background: transparent;
+  color: #555;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.avatar-frame-option.active {
+  border-color: #050505;
+  color: #050505;
+}
+
+.avatar-frame-preview {
+  position: relative;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.avatar-frame-preview-none {
+  background: rgba(37, 72, 58, 0.12);
+}
+
+.avatar-frame-preview-circle {
+  border: 1.5px solid #25483a;
+  background: #fffdf8;
+}
+
+.avatar-frame-preview-circle::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid #25483a;
+  border-radius: 46% 54% 49% 51% / 53% 47% 55% 45%;
+}
+
 .accessory-picker {
   position: relative;
   z-index: 6;

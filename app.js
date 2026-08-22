@@ -7,6 +7,7 @@ const state = {
   patternColor: null,
   pattern: "stripe",
   image: null,
+  portraitFrame: "none",
   portrait: { x: 50, y: 55, size: 232, rotation: 0 },
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
@@ -160,6 +161,7 @@ const paperFrame = document.querySelector(".paper-frame");
 const emptyState = document.querySelector("#emptyState");
 const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
+const portraitFrameButtons = document.querySelectorAll("[data-portrait-frame]");
 const portraitStage = document.querySelector("#portraitStage");
 const accessoryLayer = document.querySelector("#accessoryLayer");
 const accessoryDock = document.querySelector(".accessory-dock");
@@ -243,6 +245,16 @@ function bindEvents() {
   personUpload.addEventListener("change", handleUpload);
   accessoryUpload.addEventListener("change", handleAccessoryUpload);
   stageUploadButton.addEventListener("click", () => personUpload.click());
+  portraitFrameButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      state.portraitFrame = button.dataset.portraitFrame;
+      if (state.image) {
+        state.selectedTarget = "portrait";
+        state.selectedAccessoryId = null;
+      }
+      render();
+    });
+  });
   customColorToggle.addEventListener("click", () => {
     customColorPicker.classList.toggle("is-open");
   });
@@ -546,6 +558,11 @@ function updateControls() {
   copyColor.value = state.copyColor;
   copyText.style.fontFamily = getCopyFont().stack;
   copyText.style.color = state.copyColor;
+  portraitFrameButtons.forEach((button) => {
+    const isActive = button.dataset.portraitFrame === state.portraitFrame;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
   portraitTransform.classList.toggle("selected", state.selectedTarget === "portrait" && Boolean(state.image));
@@ -654,9 +671,82 @@ function renderPortrait() {
   portraitCtx.save();
   portraitCtx.translate(centerX, centerY);
   portraitCtx.rotate((state.portrait.rotation * Math.PI) / 180);
-  portraitCtx.drawImage(state.image, -width / 2, -height / 2, width, height);
+  if (state.portraitFrame === "circle") {
+    drawCirclePortrait(portraitCtx, state.image, Math.min(width, height));
+  } else {
+    portraitCtx.drawImage(state.image, -width / 2, -height / 2, width, height);
+  }
   portraitCtx.restore();
   renderPortraitTransform();
+}
+
+function drawCirclePortrait(ctx, image, size) {
+  const outerRadius = size * 0.49;
+  const imageRadius = size * 0.405;
+  const frameColor = "#25483a";
+
+  ctx.save();
+  ctx.fillStyle = "#fffdf8";
+  ctx.beginPath();
+  ctx.arc(0, 0, outerRadius, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(0, 0, imageRadius, 0, Math.PI * 2);
+  ctx.clip();
+  drawImageCover(ctx, image, -imageRadius, -imageRadius, imageRadius * 2, imageRadius * 2);
+  ctx.restore();
+
+  ctx.strokeStyle = frameColor;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = Math.max(1.6, size * 0.009);
+  traceHandDrawnCircle(ctx, imageRadius * 1.06, 0.011, 0.4);
+  ctx.stroke();
+  ctx.lineWidth = Math.max(1.4, size * 0.0075);
+  traceHandDrawnCircle(ctx, outerRadius * 0.94, 0.018, 1.7);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawImageCover(ctx, image, x, y, width, height) {
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
+  const targetRatio = width / height;
+  const sourceRatio = sourceWidth / sourceHeight;
+  let cropX = 0;
+  let cropY = 0;
+  let cropWidth = sourceWidth;
+  let cropHeight = sourceHeight;
+
+  if (sourceRatio > targetRatio) {
+    cropWidth = sourceHeight * targetRatio;
+    cropX = (sourceWidth - cropWidth) / 2;
+  } else {
+    cropHeight = sourceWidth / targetRatio;
+    cropY = (sourceHeight - cropHeight) / 2;
+  }
+
+  ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, x, y, width, height);
+}
+
+function traceHandDrawnCircle(ctx, radius, wobble, phase) {
+  const points = 96;
+  ctx.beginPath();
+  for (let index = 0; index <= points; index += 1) {
+    const angle = (index / points) * Math.PI * 2;
+    const variation =
+      1 +
+      wobble * Math.sin(angle * 5 + phase) +
+      wobble * 0.55 * Math.sin(angle * 11 + phase * 1.8) +
+      wobble * 0.3 * Math.cos(angle * 17 - phase);
+    const x = Math.cos(angle) * radius * variation;
+    const y = Math.sin(angle) * radius * variation;
+    if (index === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
 }
 
 function renderPortraitTransform() {
@@ -674,6 +764,7 @@ function renderPortraitTransform() {
 
 function getPortraitDisplayBox(size = state.portrait.size) {
   if (!state.image) return { width: size, height: size };
+  if (state.portraitFrame === "circle") return { width: size, height: size };
 
   const ratio = Math.min(size / state.image.width, size / state.image.height);
   return {
