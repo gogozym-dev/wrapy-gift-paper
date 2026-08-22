@@ -17,7 +17,7 @@
       content="上传头像、添加配饰，自定义颜色、纹路与文案，生成可高清打印的礼物包装纸。"
     />
     <meta property="og:url" content="https://gogozym-dev.github.io/wrapy-gift-paper/" />
-    <link rel="stylesheet" href="./styles.css?v=20260822-5" />
+    <link rel="stylesheet" href="./styles.css?v=20260822-6" />
   </head>
   <body>
     <main class="app-shell">
@@ -80,7 +80,6 @@
                   <span class="ui-icon" data-icon="accessory-add" aria-hidden="true"></span>
                   <span>添加配饰</span>
                 </button>
-                <div class="accessory-dock" aria-label="配饰选择"></div>
               </div>
             </div>
           </div>
@@ -243,6 +242,18 @@
       <div class="poster-shape shape-orange" aria-hidden="true"></div>
     </main>
 
-    <script src="./app.js?v=20260822-3"></script>
+    <dialog class="accessory-modal" id="accessoryModal" aria-labelledby="accessoryModalTitle">
+      <div class="accessory-modal-card">
+        <div class="accessory-modal-head">
+          <h3 id="accessoryModalTitle">添加配饰</h3>
+          <button class="accessory-modal-close" id="accessoryModalClose" type="button" aria-label="关闭配饰选择">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="accessory-dock" aria-label="配饰选择"></div>
+      </div>
+    </dialog>
+
+    <script src="./app.js?v=20260822-4"></script>
   </body>
 </html>

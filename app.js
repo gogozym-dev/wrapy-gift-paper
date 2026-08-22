@@ -162,6 +162,8 @@ const paperFrame = document.querySelector(".paper-frame");
 const emptyState = document.querySelector("#emptyState");
 const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
+const accessoryModal = document.querySelector("#accessoryModal");
+const accessoryModalClose = document.querySelector("#accessoryModalClose");
 const portraitFrameButtons = document.querySelectorAll("[data-portrait-frame]");
 const portraitFrameColorControl = document.querySelector("#frameColorControl");
 const portraitFrameColor = document.querySelector("#frameColor");
@@ -350,8 +352,16 @@ function bindEvents() {
 
   addAccessoryButton.addEventListener("click", () => {
     if (!state.image) return;
-    state.accessoryDockOpen = !state.accessoryDockOpen;
+    state.accessoryDockOpen = true;
     render();
+  });
+  accessoryModalClose.addEventListener("click", closeAccessoryModal);
+  accessoryModal.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeAccessoryModal();
+  });
+  accessoryModal.addEventListener("click", (event) => {
+    if (event.target === accessoryModal) closeAccessoryModal();
   });
 
   document.querySelector("#downloadBtn").addEventListener("click", () => {
@@ -362,6 +372,12 @@ function bindEvents() {
     link.href = exportCanvas.toDataURL("image/png");
     link.click();
   });
+}
+
+function closeAccessoryModal() {
+  state.accessoryDockOpen = false;
+  render();
+  addAccessoryButton.focus();
 }
 
 function handleKeyboardShortcuts(event) {
@@ -454,7 +470,7 @@ function renderAccessoryDock() {
   uploadButton.type = "button";
   uploadButton.title = "上传自定义配饰";
   uploadButton.setAttribute("aria-label", "上传自定义配饰");
-  uploadButton.innerHTML = iconSvg("plus");
+  uploadButton.innerHTML = `${iconSvg("plus")}<span>上传</span>`;
   uploadButton.addEventListener("click", () => accessoryUpload.click());
   accessoryDock.append(uploadButton);
 }
@@ -467,6 +483,7 @@ function addAccessoryFromAsset(assetId) {
   insertAccessory(assetId);
   state.accessoryDockOpen = false;
   render();
+  addAccessoryButton.focus();
 }
 
 function handleAccessoryUpload(event) {
@@ -488,6 +505,7 @@ function handleAccessoryUpload(event) {
     accessoryUpload.value = "";
     renderAccessoryDock();
     render();
+    addAccessoryButton.focus();
   };
   image.src = asset.src;
   accessoryImageMap.set(asset.id, image);
@@ -586,13 +604,24 @@ function updateControls() {
     state.pendingAccessoryAssetId = null;
   }
   addAccessoryButton.classList.toggle("active", state.accessoryDockOpen);
-  accessoryDock.classList.toggle("is-open", state.accessoryDockOpen);
+  syncAccessoryModal();
   [copySize, copyOffsetX, copyOffsetY, repeatDensity, paperImageScale].forEach(updateRangeFill);
   const spec = getPrintSpec();
   if (printMeta) {
     printMeta.textContent = `${spec.label} · 300 DPI · ${spec.pixels.width} × ${spec.pixels.height} px`;
   }
   updatePreviewZoom();
+}
+
+function syncAccessoryModal() {
+  const shouldOpen = state.accessoryDockOpen && Boolean(state.image);
+  if (shouldOpen && !accessoryModal.open) {
+    accessoryModal.showModal();
+    accessoryModalClose.focus();
+  } else if (!shouldOpen && accessoryModal.open) {
+    accessoryModal.close();
+  }
+  document.body.classList.toggle("accessory-modal-open", shouldOpen);
 }
 
 function openColorInput(input) {
