@@ -1080,7 +1080,14 @@ input[type="range"]::-moz-range-thumb {
   overflow: hidden;
 }
 
+.copy-font-control {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
 .copy-font-control select {
+  width: 100%;
   min-height: 18px;
   border: 0;
   border-radius: 0;
@@ -1088,6 +1095,8 @@ input[type="range"]::-moz-range-thumb {
   padding: 0;
   color: var(--ink);
   font-weight: 400;
+  text-align: right;
+  text-align-last: right;
   outline: 0;
 }
 
