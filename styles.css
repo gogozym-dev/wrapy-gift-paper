@@ -521,8 +521,8 @@ select {
 }
 
 .avatar-frame-preview-circle {
-  border: 1px solid #a44843;
-  outline: 1px dotted rgba(164, 72, 67, 0.72);
+  border: 1px solid var(--frame-color, #a44843);
+  outline: 1px dotted var(--frame-color, #a44843);
   outline-offset: 1px;
   background: #fffdf8;
 }
@@ -534,7 +534,7 @@ select {
   top: -5px;
   width: 6px;
   height: 4px;
-  border: 1px solid #a44843;
+  border: 1px solid var(--frame-color, #a44843);
   background: #fffdf8;
 }
 
@@ -548,6 +548,43 @@ select {
   left: 7px;
   border-radius: 30% 70% 35% 65%;
   transform: rotate(-22deg);
+}
+
+.frame-color-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  color: #555;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.frame-color-control[hidden] {
+  display: none;
+}
+
+.frame-color-control input[type="color"] {
+  width: 22px;
+  min-height: 22px;
+  height: 22px;
+  padding: 2px;
+  border: 1px solid rgba(5, 5, 5, 0.14);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.frame-color-control input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.frame-color-control input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 50%;
 }
 
 .accessory-picker {

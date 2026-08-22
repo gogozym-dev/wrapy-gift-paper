@@ -8,6 +8,7 @@ const state = {
   pattern: "stripe",
   image: null,
   portraitFrame: "none",
+  portraitFrameColor: "#a44843",
   portrait: { x: 50, y: 55, size: 232, rotation: 0 },
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
@@ -162,6 +163,9 @@ const emptyState = document.querySelector("#emptyState");
 const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
 const portraitFrameButtons = document.querySelectorAll("[data-portrait-frame]");
+const portraitFrameColorControl = document.querySelector("#frameColorControl");
+const portraitFrameColor = document.querySelector("#frameColor");
+const portraitFramePreview = document.querySelector(".avatar-frame-preview-circle");
 const portraitStage = document.querySelector("#portraitStage");
 const accessoryLayer = document.querySelector("#accessoryLayer");
 const accessoryDock = document.querySelector(".accessory-dock");
@@ -254,6 +258,10 @@ function bindEvents() {
       }
       render();
     });
+  });
+  portraitFrameColor.addEventListener("input", (event) => {
+    state.portraitFrameColor = event.target.value;
+    render();
   });
   customColorToggle.addEventListener("click", () => {
     customColorPicker.classList.toggle("is-open");
@@ -563,6 +571,9 @@ function updateControls() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+  portraitFrameColor.value = state.portraitFrameColor;
+  portraitFrameColorControl.hidden = state.portraitFrame !== "circle";
+  portraitFramePreview.style.setProperty("--frame-color", state.portraitFrameColor);
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
   portraitTransform.classList.toggle("selected", state.selectedTarget === "portrait" && Boolean(state.image));
@@ -685,7 +696,7 @@ function drawCirclePortrait(ctx, image, size) {
   const imageRadius = size * 0.35;
   const innerFrameRadius = size * 0.368;
   const outerFrameRadius = size * 0.414;
-  const frameColor = "#a44843";
+  const frameColor = state.portraitFrameColor;
 
   ctx.save();
   ctx.fillStyle = "#fffdf8";
