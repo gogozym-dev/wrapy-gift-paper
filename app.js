@@ -1364,30 +1364,12 @@ function drawCopySticker(ctx, sticker, x, y) {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.font = sticker.font;
-  ctx.fillStyle = "rgba(255, 254, 248, 0.5)";
-  drawRoundRect(ctx, -sticker.boxWidth / 2, -sticker.boxHeight / 2, sticker.boxWidth, sticker.boxHeight, sticker.boxHeight / 2);
-  ctx.fill();
   ctx.fillStyle = state.copyColor;
   const firstLineY = -sticker.textHeight / 2 + sticker.lineHeight / 2;
   sticker.lines.forEach((line, lineIndex) => {
     ctx.fillText(line, 0, firstLineY + lineIndex * sticker.lineHeight);
   });
   ctx.restore();
-}
-
-function drawRoundRect(ctx, x, y, width, height, radius) {
-  const safeRadius = Math.min(radius, width / 2, height / 2);
-  ctx.beginPath();
-  ctx.moveTo(x + safeRadius, y);
-  ctx.lineTo(x + width - safeRadius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + safeRadius);
-  ctx.lineTo(x + width, y + height - safeRadius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - safeRadius, y + height);
-  ctx.lineTo(x + safeRadius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - safeRadius);
-  ctx.lineTo(x, y + safeRadius);
-  ctx.quadraticCurveTo(x, y, x + safeRadius, y);
-  ctx.closePath();
 }
 
 function makePortraitTile() {
