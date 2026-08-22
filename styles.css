@@ -109,17 +109,6 @@ textarea:focus-visible {
   overflow: hidden;
 }
 
-.app-brand {
-  grid-column: 1 / -1;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 54px;
-}
-
 .editor-panel,
 .preview-panel {
   position: relative;
@@ -1375,10 +1364,6 @@ input[type="range"]::-moz-range-thumb {
     padding: 12px 24px 0;
   }
 
-  .app-brand {
-    min-height: 48px;
-  }
-
   h1 {
     font-size: clamp(44px, 4.4vw, 52px);
     line-height: 0.85;
@@ -1577,10 +1562,6 @@ input[type="range"]::-moz-range-thumb {
     overflow: visible;
   }
 
-  .app-brand {
-    min-height: auto;
-  }
-
   .preview-panel {
     min-height: 62vh;
   }
@@ -1596,10 +1577,6 @@ input[type="range"]::-moz-range-thumb {
   .preview-panel {
     padding: 20px;
     border-radius: 26px;
-  }
-
-  .app-brand {
-    align-items: center;
   }
 
   .avatar-workbench,
