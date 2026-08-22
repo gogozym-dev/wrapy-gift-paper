@@ -529,7 +529,7 @@ function renderAccessoryDock() {
   uploadButton.type = "button";
   uploadButton.title = "上传自定义配饰";
   uploadButton.setAttribute("aria-label", "上传自定义配饰");
-  uploadButton.innerHTML = `${iconSvg("plus")}<span>上传</span>`;
+  uploadButton.innerHTML = `${iconSvg("plus")}<span>上传自定义配饰</span>`;
   uploadButton.addEventListener("click", () => accessoryUpload.click());
   accessoryDock.append(uploadButton);
 }
