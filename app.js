@@ -503,19 +503,33 @@ function renderAccessoryDock() {
     button.type = "button";
     button.dataset.assetId = asset.id;
     button.title = asset.name;
-    button.innerHTML = `<img src="${asset.previewSrc || asset.src}" alt="${asset.name}" width="240" height="240" loading="lazy" decoding="async" />`;
-    const previewImage = button.querySelector("img");
-    previewImage.addEventListener("load", () => button.classList.remove("is-error"));
+    button.classList.add("is-loading");
+
+    const previewImage = document.createElement("img");
+    previewImage.alt = asset.name;
+    previewImage.width = 240;
+    previewImage.height = 240;
+    previewImage.loading = "eager";
+    previewImage.decoding = "async";
+    previewImage.addEventListener("load", () => {
+      previewImage.hidden = false;
+      button.classList.remove("is-loading", "is-error");
+      button.title = asset.name;
+    });
     previewImage.addEventListener("error", () => {
       if (!previewImage.dataset.usedFallback && asset.previewSrc && asset.previewSrc !== asset.src) {
         previewImage.dataset.usedFallback = "true";
+        previewImage.hidden = false;
         previewImage.src = asset.src;
         return;
       }
       previewImage.hidden = true;
+      button.classList.remove("is-loading");
       button.classList.add("is-error");
       button.title = "加载失败，点击重试";
     });
+    button.append(previewImage);
+    previewImage.src = asset.previewSrc || asset.src;
     button.classList.toggle("active", asset.id === state.selectedAssetId);
     button.addEventListener("click", async () => {
       state.selectedAssetId = asset.id;
