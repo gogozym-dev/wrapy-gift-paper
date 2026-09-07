@@ -240,8 +240,8 @@ h2 small {
 
 .accessory img {
   display: block;
-  max-width: 82%;
-  max-height: 82%;
+  width: 82%;
+  height: 82%;
   object-fit: contain;
 }
 
@@ -733,8 +733,8 @@ select {
 }
 
 .accessory-modal .accessory img {
-  max-width: 88%;
-  max-height: 88%;
+  width: 88%;
+  height: 88%;
 }
 
 .accessory-modal .accessory-upload {
