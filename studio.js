@@ -51,9 +51,12 @@ studioPanelCloseButtons.forEach((button) => {
 
 document.addEventListener("pointerdown", (event) => {
   if (!activeStudioTool) return;
-  if (event.target.closest("dialog[open]")) return;
+  const eventPath = event.composedPath();
+  if (eventPath.some((node) => node instanceof Element && node.matches("dialog[open]"))) return;
   const activePanel = studioPanels.find((panel) => panel.dataset.studioPanel === activeStudioTool);
-  if (activePanel?.contains(event.target) || event.target.closest("[data-studio-tool]")) return;
+  const startedInsidePanel = activePanel && eventPath.includes(activePanel);
+  const startedOnTool = studioToolButtons.some((button) => eventPath.includes(button));
+  if (startedInsidePanel || startedOnTool) return;
   closeActiveStudioTool();
 });
 
