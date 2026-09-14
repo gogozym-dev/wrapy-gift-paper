@@ -346,7 +346,8 @@ h2 small {
   box-shadow: none;
 }
 
-.swatch::before {
+.swatch::before,
+.custom-color-trigger::before {
   content: "";
   width: 44px;
   height: 44px;
@@ -360,7 +361,8 @@ h2 small {
   color: #111;
 }
 
-.swatch.active::before {
+.swatch.active::before,
+.custom-color-trigger.active::before {
   border-color: #050505;
   box-shadow: none;
 }
@@ -380,7 +382,8 @@ h2 small {
   transform: scale(0.72);
 }
 
-.swatch.active .swatch-check {
+.swatch.active .swatch-check,
+.custom-color-trigger.active .swatch-check {
   opacity: 1;
   transform: scale(1);
 }
@@ -1206,23 +1209,25 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .custom-color-trigger {
-  width: 44px;
-  height: 44px;
+  position: relative;
+  display: grid;
+  width: 54px;
+  min-height: 44px;
+  align-items: start;
+  justify-items: center;
   padding: 0;
   border: 0;
-  border-radius: 999px;
-  overflow: hidden;
-  background: conic-gradient(#ff6b6b, #ffd93d, #6bff95, #55c7f1, #8f55ff, #ff6bcb, #ff6b6b);
+  background: transparent;
   box-shadow: none;
   cursor: pointer;
 }
 
-.custom-color-trigger.active {
-  box-shadow: 0 0 0 2px #050505;
+.custom-color-trigger::before {
+  background: conic-gradient(#ff6b6b, #ffd93d, #6bff95, #55c7f1, #8f55ff, #ff6bcb, #ff6b6b);
 }
 
 .custom-color-trigger:hover {
-  transform: translateY(-1px) scale(1.03);
+  transform: none;
 }
 
 .custom-color-menu {
