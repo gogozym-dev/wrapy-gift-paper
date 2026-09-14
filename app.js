@@ -191,7 +191,6 @@ const previewDetailCanvasHost = document.querySelector("#previewDetailCanvasHost
 const previewDetailOpen = document.querySelector("#previewDetailOpen");
 const previewDetailClose = document.querySelector("#previewDetailClose");
 const emptyState = document.querySelector("#emptyState");
-const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
 const accessoryModal = document.querySelector("#accessoryModal");
 const accessoryModalClose = document.querySelector("#accessoryModalClose");
@@ -297,7 +296,6 @@ function makeIconSpan(icon) {
 function bindEvents() {
   personUpload.addEventListener("change", handleUpload);
   accessoryUpload.addEventListener("change", handleAccessoryUpload);
-  stageUploadButton.addEventListener("click", () => personUpload.click());
   portraitFrameButtons.forEach((button) => {
     button.addEventListener("click", () => {
       state.portraitFrame = button.dataset.portraitFrame;
@@ -776,7 +774,6 @@ function updateControls() {
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
   portraitTransform.classList.toggle("selected", state.selectedTarget === "portrait" && Boolean(state.image));
-  setIconButtonLabel(stageUploadButton, "avatar-upload", state.image ? "更换头像" : "上传头像");
   setIconButtonLabel(addAccessoryButton, "accessory-add", "添加配饰");
   addAccessoryButton.disabled = !state.image;
   addAccessoryButton.setAttribute("aria-disabled", String(!state.image));
