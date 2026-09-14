@@ -1733,15 +1733,15 @@ function drawPattern(ctx, width, height, scaleRatio = 1) {
     const spacingY = 28 * scaleRatio;
     const startX = 12 * scaleRatio;
     const startY = 12 * scaleRatio;
+    const dotRadius = 2.5 * scaleRatio;
     let dotIndex = 0;
 
     for (let y = startY, row = 0; y < height + spacingY; y += spacingY, row += 1) {
       const offsetX = row % 2 === 0 ? 0 : spacingX / 2;
       for (let x = startX + offsetX; x < width + spacingX; x += spacingX) {
-        const radius = (2.15 + (dotIndex % 3) * 0.35) * scaleRatio;
         ctx.fillStyle = patternColors.dots[dotIndex % patternColors.dots.length];
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
         ctx.fill();
         dotIndex += 1;
       }
