@@ -1,5 +1,6 @@
 const studioToolButtons = [...document.querySelectorAll("[data-studio-tool]")];
 const studioPanels = [...document.querySelectorAll("[data-studio-panel]")];
+const studioPanelCloseButtons = [...document.querySelectorAll("[data-studio-close]")];
 
 let activeStudioTool = null;
 
@@ -22,6 +23,13 @@ function setActiveStudioTool(nextTool, options = {}) {
   }
 }
 
+function closeActiveStudioTool(options = {}) {
+  if (!activeStudioTool) return;
+  const activeButton = studioToolButtons.find((button) => button.dataset.studioTool === activeStudioTool);
+  setActiveStudioTool(null);
+  if (options.restoreFocus) activeButton?.focus({ preventScroll: true });
+}
+
 studioToolButtons.forEach((button) => {
   const panelId = `studio-panel-${button.dataset.studioTool}`;
   const panel = studioPanels.find((item) => item.dataset.studioPanel === button.dataset.studioTool);
@@ -34,9 +42,21 @@ studioToolButtons.forEach((button) => {
   });
 });
 
+studioPanelCloseButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    closeActiveStudioTool({ restoreFocus: true });
+  });
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (!activeStudioTool) return;
+  const activePanel = studioPanels.find((panel) => panel.dataset.studioPanel === activeStudioTool);
+  if (activePanel?.contains(event.target) || event.target.closest("[data-studio-tool]")) return;
+  closeActiveStudioTool();
+});
+
 window.addEventListener("keydown", (event) => {
   if (event.key !== "Escape" || !activeStudioTool) return;
-  const activeButton = studioToolButtons.find((button) => button.dataset.studioTool === activeStudioTool);
-  setActiveStudioTool(null);
-  activeButton?.focus();
+  closeActiveStudioTool({ restoreFocus: true });
 });
