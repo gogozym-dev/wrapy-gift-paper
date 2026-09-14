@@ -618,33 +618,23 @@ select {
 }
 
 .avatar-frame-preview-circle {
-  border: 1px solid var(--frame-color, #1c9cc7);
-  outline: 1px dotted var(--frame-color, #1c9cc7);
-  outline-offset: 1px;
-  background: #fffdf8;
+  width: 23px;
+  height: 25px;
+  border-radius: 0;
+  color: var(--frame-color, #1c9cc7);
+  background: transparent;
 }
 
-.avatar-frame-preview-circle::before,
-.avatar-frame-preview-circle::after {
-  content: "";
-  position: absolute;
-  top: -5px;
-  width: 6px;
-  height: 4px;
-  border: 1px solid var(--frame-color, #1c9cc7);
-  background: #fffdf8;
-}
-
-.avatar-frame-preview-circle::before {
-  right: 7px;
-  border-radius: 70% 30% 65% 35%;
-  transform: rotate(22deg);
-}
-
-.avatar-frame-preview-circle::after {
-  left: 7px;
-  border-radius: 30% 70% 35% 65%;
-  transform: rotate(-22deg);
+.avatar-frame-preview-circle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: #ffffff;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .accessory-picker {

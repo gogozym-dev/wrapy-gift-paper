@@ -945,46 +945,46 @@ function renderPortrait() {
 }
 
 function drawCirclePortrait(ctx, image, size) {
-  const frameCenterY = size * 0.055;
-  const imageRadius = size * 0.35;
-  const innerFrameRadius = size * 0.368;
-  const outerFrameRadius = size * 0.414;
+  const frameCenterY = size * 0.035;
+  const imageHalfWidth = size * 0.292;
+  const imageHalfHeight = size * 0.326;
   const frameColor = getPortraitFrameColor();
 
   ctx.save();
-  ctx.fillStyle = "#fffdf8";
-  ctx.beginPath();
-  ctx.arc(0, frameCenterY, outerFrameRadius + size * 0.018, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  traceVintageFramePath(ctx, size, 0.365, 0.405, frameCenterY);
   ctx.fill();
 
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(0, frameCenterY, imageRadius, 0, Math.PI * 2);
+  traceVintageFramePath(ctx, size, 0.292, 0.326, frameCenterY + size * 0.006);
   ctx.clip();
   drawImageCover(
     ctx,
     image,
-    -imageRadius,
-    frameCenterY - imageRadius,
-    imageRadius * 2,
-    imageRadius * 2,
+    -imageHalfWidth,
+    frameCenterY + size * 0.006 - imageHalfHeight,
+    imageHalfWidth * 2,
+    imageHalfHeight * 2,
   );
   ctx.restore();
 
   ctx.strokeStyle = frameColor;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
-  ctx.lineWidth = Math.max(1.5, size * 0.008);
-  traceHandDrawnCircle(ctx, innerFrameRadius, 0.01, 0.4, frameCenterY);
+  ctx.lineWidth = Math.max(1.6, size * 0.008);
+  traceVintageFramePath(ctx, size, 0.365, 0.405, frameCenterY);
   ctx.stroke();
-  ctx.lineWidth = Math.max(1.2, size * 0.0065);
-  traceHandDrawnCircle(ctx, innerFrameRadius + size * 0.018, 0.012, 1.7, frameCenterY);
+  ctx.lineWidth = Math.max(1.1, size * 0.0055);
+  traceVintageFramePath(ctx, size, 0.337, 0.378, frameCenterY);
+  ctx.stroke();
+  traceVintageFramePath(ctx, size, 0.307, 0.342, frameCenterY + size * 0.006);
   ctx.stroke();
 
-  ctx.lineWidth = Math.max(1.3, size * 0.007);
-  traceScallopedCircle(ctx, outerFrameRadius, size * 0.013, 42, frameCenterY);
-  ctx.stroke();
   drawFrameBow(ctx, size, frameColor);
+  drawFrameFlowerSprig(ctx, -size * 0.32, -size * 0.275, size, frameColor, -0.7);
+  drawFrameFlowerSprig(ctx, size * 0.32, -size * 0.275, size, frameColor, 0.7);
+  drawFrameFlowerSprig(ctx, -size * 0.31, size * 0.34, size, frameColor, -2.35);
+  drawFrameFlowerSprig(ctx, size * 0.31, size * 0.34, size, frameColor, 2.35);
   ctx.restore();
 }
 
@@ -1009,49 +1009,79 @@ function drawImageCover(ctx, image, x, y, width, height) {
   ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, x, y, width, height);
 }
 
-function traceHandDrawnCircle(ctx, radius, wobble, phase, centerY = 0) {
-  const points = 96;
+function traceVintageFramePath(ctx, size, halfWidthFactor, halfHeightFactor, centerY = 0) {
+  const width = size * halfWidthFactor;
+  const height = size * halfHeightFactor;
+
   ctx.beginPath();
-  for (let index = 0; index <= points; index += 1) {
-    const angle = (index / points) * Math.PI * 2;
-    const variation =
-      1 +
-      wobble * Math.sin(angle * 5 + phase) +
-      wobble * 0.55 * Math.sin(angle * 11 + phase * 1.8) +
-      wobble * 0.3 * Math.cos(angle * 17 - phase);
-    const x = Math.cos(angle) * radius * variation;
-    const y = centerY + Math.sin(angle) * radius * variation;
-    if (index === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  }
+  ctx.moveTo(0, centerY - height);
+  ctx.bezierCurveTo(width * 0.22, centerY - height, width * 0.28, centerY - height * 0.94, width * 0.5, centerY - height * 0.93);
+  ctx.bezierCurveTo(width * 0.78, centerY - height * 0.92, width * 0.78, centerY - height * 0.73, width * 0.87, centerY - height * 0.64);
+  ctx.bezierCurveTo(width * 1.03, centerY - height * 0.49, width * 0.92, centerY - height * 0.25, width, centerY - height * 0.05);
+  ctx.bezierCurveTo(width * 1.04, centerY + height * 0.23, width * 0.93, centerY + height * 0.56, width * 0.71, centerY + height * 0.75);
+  ctx.bezierCurveTo(width * 0.53, centerY + height * 0.91, width * 0.23, centerY + height * 0.86, 0, centerY + height);
+  ctx.bezierCurveTo(-width * 0.23, centerY + height * 0.86, -width * 0.53, centerY + height * 0.91, -width * 0.71, centerY + height * 0.75);
+  ctx.bezierCurveTo(-width * 0.93, centerY + height * 0.56, -width * 1.04, centerY + height * 0.23, -width, centerY - height * 0.05);
+  ctx.bezierCurveTo(-width * 0.92, centerY - height * 0.25, -width * 1.03, centerY - height * 0.49, -width * 0.87, centerY - height * 0.64);
+  ctx.bezierCurveTo(-width * 0.78, centerY - height * 0.73, -width * 0.78, centerY - height * 0.92, -width * 0.5, centerY - height * 0.93);
+  ctx.bezierCurveTo(-width * 0.28, centerY - height * 0.94, -width * 0.22, centerY - height, 0, centerY - height);
   ctx.closePath();
 }
 
-function traceScallopedCircle(ctx, radius, depth, scallops, centerY) {
-  const points = scallops * 8;
+function drawFrameFlowerSprig(ctx, x, y, size, color, rotation) {
+  const flowerRadius = size * 0.026;
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  ctx.strokeStyle = color;
+  ctx.fillStyle = "#ffffff";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = Math.max(1, size * 0.0048);
+
   ctx.beginPath();
-  for (let index = 0; index <= points; index += 1) {
-    const angle = (index / points) * Math.PI * 2;
-    const scallop = (1 - Math.cos(angle * scallops)) / 2;
-    const handDrawn = Math.sin(angle * 7 + 0.8) * depth * 0.12;
-    const currentRadius = radius + scallop * depth + handDrawn;
-    const x = Math.cos(angle) * currentRadius;
-    const y = centerY + Math.sin(angle) * currentRadius;
-    if (index === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+  ctx.moveTo(flowerRadius * 0.35, flowerRadius * 0.5);
+  ctx.bezierCurveTo(flowerRadius * 1.8, flowerRadius * 1.1, flowerRadius * 2.2, flowerRadius * 2.2, flowerRadius * 3.1, flowerRadius * 2.9);
+  ctx.stroke();
+
+  [-0.55, 0.55].forEach((offset, index) => {
+    ctx.save();
+    ctx.translate(flowerRadius * (1.35 + index * 0.75), flowerRadius * (1.25 + index * 0.7));
+    ctx.rotate(offset);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, flowerRadius * 0.72, flowerRadius * 0.34, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  for (let petal = 0; petal < 5; petal += 1) {
+    ctx.save();
+    ctx.rotate((petal / 5) * Math.PI * 2);
+    ctx.beginPath();
+    ctx.ellipse(0, -flowerRadius * 0.82, flowerRadius * 0.38, flowerRadius * 0.66, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
   }
-  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.arc(0, 0, flowerRadius * 0.31, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
 }
 
 function drawFrameBow(ctx, size, color) {
-  const y = -size * 0.355;
+  const y = -size * 0.37;
   const knotRadius = size * 0.026;
-  const loopWidth = size * 0.18;
-  const loopHeight = size * 0.095;
+  const loopWidth = size * 0.195;
+  const loopHeight = size * 0.105;
 
   ctx.save();
   ctx.strokeStyle = color;
-  ctx.fillStyle = "#fffdf8";
+  ctx.fillStyle = "#ffffff";
   ctx.lineWidth = Math.max(1.3, size * 0.007);
 
   ctx.beginPath();
