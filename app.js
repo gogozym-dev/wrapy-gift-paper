@@ -33,11 +33,11 @@ const state = {
 
 const colors = [
   { name: "冰白", value: DEFAULT_BASE_COLOR },
-  { name: "樱粉", value: "#fae3e4" },
-  { name: "鼠尾草", value: "#edf2df" },
-  { name: "雾蓝", value: "#ebf1f7" },
-  { name: "薰衣草", value: "#f0ebf5" },
-  { name: "燕麦", value: "#f3ede4" },
+  { name: "樱粉", value: "#fff5f6" },
+  { name: "鼠尾草", value: "#f7faef" },
+  { name: "雾蓝", value: "#f5f8fc" },
+  { name: "薰衣草", value: "#f8f5fc" },
+  { name: "燕麦", value: "#faf7f2" },
 ];
 const PREVIEW_BASE_WIDTH = 1120;
 const SYSTEM_FONT_STACK = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif';
@@ -1738,7 +1738,7 @@ function getPatternColors(hex, patternHex = null) {
   const medium = mixRgb(patternBase, { r: 58, g: 56, b: 52 }, patternHex ? 0.06 : 0.26);
   const light = mixRgb(base, { r: 255, g: 255, b: 255 }, 0.42);
   return {
-    deep: rgba(deep, 0.16),
+    deep: rgba(deep, patternHex ? 0.16 : 0.2),
     medium: rgba(medium, 0.2),
     dots: patternHex
       ? [rgba(patternBase, 0.34), rgba(patternBase, 0.26), rgba(patternBase, 0.2)]
