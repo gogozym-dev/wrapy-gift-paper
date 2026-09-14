@@ -18,7 +18,7 @@
     />
     <meta property="og:url" content="https://mengmengwrapy.xyz/studio.html" />
     <link rel="stylesheet" href="./styles.css?v=20260914-2" />
-    <link rel="stylesheet" href="./studio.css?v=20260915-5" />
+    <link rel="stylesheet" href="./studio.css?v=20260915-6" />
   </head>
   <body class="studio-page">
     <main class="app-shell studio-shell">
@@ -194,21 +194,22 @@
             <strong>字体</strong>
             <small>Font</small>
           </div>
-          <div class="studio-font-picker">
-            <button
-              class="copy-font-trigger"
-              id="copyFontTrigger"
-              type="button"
-              aria-haspopup="dialog"
-              aria-controls="fontModal"
-              aria-expanded="false"
-            >
-              <span class="studio-font-current">
-                <small>当前字体</small>
-                <strong id="copyFontLabel">Fredoka</strong>
-              </span>
-              <span class="studio-font-action">选择字体</span>
-              <span class="ui-icon" data-icon="chevron-down" aria-hidden="true"></span>
+          <div class="font-options studio-font-options" aria-label="字体选择">
+            <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
+              <span class="font-option-name">Fredoka</span>
+              <span class="font-option-preview font-preview-fredoka">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
+              <span class="font-option-name">DynaPuff</span>
+              <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
+              <span class="font-option-name">Sour Gummy</span>
+              <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
+              <span class="font-option-name">Baloo 2</span>
+              <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
             </button>
             <select id="copyFont" class="visually-hidden" tabindex="-1" aria-hidden="true">
               <option value="fredoka" selected>Fredoka</option>
@@ -343,36 +344,7 @@
       </div>
     </dialog>
 
-    <dialog class="accessory-modal font-modal" id="fontModal" aria-labelledby="fontModalTitle">
-      <div class="accessory-modal-card font-modal-card">
-        <div class="accessory-modal-head">
-          <h3 id="fontModalTitle">选择字体</h3>
-          <button class="accessory-modal-close" id="fontModalClose" type="button" aria-label="关闭字体选择">
-            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
-          </button>
-        </div>
-        <div class="font-options" aria-label="字体选择">
-          <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
-            <span class="font-option-name">Fredoka</span>
-            <span class="font-option-preview font-preview-fredoka">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
-            <span class="font-option-name">DynaPuff</span>
-            <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
-            <span class="font-option-name">Sour Gummy</span>
-            <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
-            <span class="font-option-name">Baloo 2</span>
-            <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
-          </button>
-        </div>
-      </div>
-    </dialog>
-
-    <script src="./app.js?v=20260915-5"></script>
+    <script src="./app.js?v=20260915-6"></script>
     <script src="./studio.js?v=20260915-4"></script>
   </body>
 </html>

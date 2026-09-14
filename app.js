@@ -348,19 +348,19 @@ function bindEvents() {
     updateRangeFill(event.target);
     render();
   });
-  copyFontTrigger.addEventListener("click", () => {
+  copyFontTrigger?.addEventListener("click", () => {
     state.fontModalOpen = true;
     render();
   });
   copyFontButtons.forEach((button) => {
     button.addEventListener("click", () => selectCopyFont(button.dataset.copyFont));
   });
-  fontModalClose.addEventListener("click", closeFontModal);
-  fontModal.addEventListener("cancel", (event) => {
+  fontModalClose?.addEventListener("click", closeFontModal);
+  fontModal?.addEventListener("cancel", (event) => {
     event.preventDefault();
     closeFontModal();
   });
-  fontModal.addEventListener("click", (event) => {
+  fontModal?.addEventListener("click", (event) => {
     if (event.target === fontModal) closeFontModal();
   });
   copyColor.addEventListener("input", (event) => {
@@ -457,13 +457,13 @@ function selectCopyFont(fontKey) {
   state.fontModalOpen = false;
   render();
   ensureCopyFontLoaded().then(render);
-  copyFontTrigger.focus();
+  copyFontTrigger?.focus();
 }
 
 function closeFontModal() {
   state.fontModalOpen = false;
   syncFontModal();
-  copyFontTrigger.focus();
+  copyFontTrigger?.focus();
 }
 
 function handleKeyboardShortcuts(event) {
@@ -752,7 +752,7 @@ function updateControls() {
   });
   patternSelect.value = state.pattern;
   copyFont.value = state.copyFont;
-  copyFontLabel.textContent = getCopyFont().label;
+  if (copyFontLabel) copyFontLabel.textContent = getCopyFont().label;
   copyFontButtons.forEach((button) => {
     const isActive = button.dataset.copyFont === state.copyFont;
     button.classList.toggle("active", isActive);
@@ -803,13 +803,18 @@ function syncAccessoryModal() {
 }
 
 function syncFontModal() {
+  if (!fontModal) {
+    state.fontModalOpen = false;
+    document.body.classList.remove("font-modal-open");
+    return;
+  }
   if (state.fontModalOpen && !fontModal.open) {
     fontModal.showModal();
-    fontModalClose.focus();
+    fontModalClose?.focus();
   } else if (!state.fontModalOpen && fontModal.open) {
     fontModal.close();
   }
-  copyFontTrigger.setAttribute("aria-expanded", String(state.fontModalOpen));
+  copyFontTrigger?.setAttribute("aria-expanded", String(state.fontModalOpen));
   document.body.classList.toggle("font-modal-open", state.fontModalOpen);
 }
 
