@@ -379,6 +379,7 @@ function bindEvents() {
   portraitTransform.querySelector(".rotate-handle").addEventListener("pointerdown", startPortraitRotate);
   portraitTransform.querySelector(".close-handle").addEventListener("pointerdown", closePortraitFromHandle);
   portraitStage.addEventListener("pointerdown", handleStageBlankPointerDown);
+  portraitStage.addEventListener("click", handleEmptyStageClick);
   document.addEventListener("pointerdown", handleGlobalPointerDown);
   document.querySelector("#zoomOutBtn").addEventListener("click", () => setPreviewZoom(state.previewZoom - 0.25));
   document.querySelector("#zoomInBtn").addEventListener("click", () => setPreviewZoom(state.previewZoom + 0.25));
@@ -480,15 +481,17 @@ function removeAccessory(id) {
 
 function handleStageBlankPointerDown(event) {
   if (event.target !== portraitCanvas && event.target !== portraitStage) return;
-  if (!state.image) {
-    personUpload.click();
-    return;
-  }
+  if (!state.image) return;
 
   state.selectedTarget = null;
   state.selectedAccessoryId = null;
   document.activeElement?.blur();
   render();
+}
+
+function handleEmptyStageClick(event) {
+  if (state.image || (event.target !== portraitCanvas && event.target !== portraitStage)) return;
+  personUpload.click();
 }
 
 function isTypingTarget(target) {
@@ -722,6 +725,7 @@ function updateControls() {
   portraitFrameColor.value = state.portraitFrameColor;
   portraitFrameColorControl.hidden = state.portraitFrame !== "circle";
   portraitFramePreview.style.setProperty("--frame-color", state.portraitFrameColor);
+  portraitStage.classList.toggle("is-empty", !state.image);
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
   portraitTransform.classList.toggle("selected", state.selectedTarget === "portrait" && Boolean(state.image));

@@ -536,12 +536,29 @@ select {
   font-weight: 900;
   text-align: center;
   pointer-events: none;
+  transform: scale(1);
+  transition: transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .empty-state .empty-state-icon {
   width: 30px;
   height: 30px;
   stroke-width: 2;
+}
+
+.portrait-stage.is-empty {
+  cursor: pointer;
+}
+
+.portrait-stage.is-empty:active .empty-state {
+  transform: scale(0.9);
+  transition-duration: 80ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state {
+    transition: none;
+  }
 }
 
 .avatar-actions {
