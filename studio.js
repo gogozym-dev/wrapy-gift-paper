@@ -51,6 +51,7 @@ studioPanelCloseButtons.forEach((button) => {
 
 document.addEventListener("pointerdown", (event) => {
   if (!activeStudioTool) return;
+  if (event.target.closest("dialog[open]")) return;
   const activePanel = studioPanels.find((panel) => panel.dataset.studioPanel === activeStudioTool);
   if (activePanel?.contains(event.target) || event.target.closest("[data-studio-tool]")) return;
   closeActiveStudioTool();
