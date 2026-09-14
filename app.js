@@ -11,7 +11,6 @@ const state = {
   pattern: "stripe",
   image: null,
   portraitFrame: "none",
-  portraitFrameColor: "#a44843",
   portrait: { x: 50, y: 55, size: 232, rotation: 0 },
   repeatDensity: DEFAULT_REPEAT_DENSITY,
   copyText: "happy brithday",
@@ -189,8 +188,6 @@ const accessoryModalClose = document.querySelector("#accessoryModalClose");
 const fontModal = document.querySelector("#fontModal");
 const fontModalClose = document.querySelector("#fontModalClose");
 const portraitFrameButtons = document.querySelectorAll("[data-portrait-frame]");
-const portraitFrameColorControl = document.querySelector("#frameColorControl");
-const portraitFrameColor = document.querySelector("#frameColor");
 const portraitFramePreview = document.querySelector(".avatar-frame-preview-circle");
 const portraitStage = document.querySelector("#portraitStage");
 const accessoryLayer = document.querySelector("#accessoryLayer");
@@ -284,10 +281,6 @@ function bindEvents() {
       }
       render();
     });
-  });
-  portraitFrameColor.addEventListener("input", (event) => {
-    state.portraitFrameColor = event.target.value;
-    render();
   });
   customColorToggle.addEventListener("click", () => {
     customColorPicker.classList.toggle("is-open");
@@ -722,9 +715,7 @@ function updateControls() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
-  portraitFrameColor.value = state.portraitFrameColor;
-  portraitFrameColorControl.hidden = state.portraitFrame !== "circle";
-  portraitFramePreview.style.setProperty("--frame-color", state.portraitFrameColor);
+  portraitFramePreview.style.setProperty("--frame-color", getPortraitFrameColor());
   portraitStage.classList.toggle("is-empty", !state.image);
   emptyState.classList.toggle("is-hidden", Boolean(state.image));
   portraitTransform.classList.toggle("is-hidden", !state.image);
@@ -871,7 +862,7 @@ function drawCirclePortrait(ctx, image, size) {
   const imageRadius = size * 0.35;
   const innerFrameRadius = size * 0.368;
   const outerFrameRadius = size * 0.414;
-  const frameColor = state.portraitFrameColor;
+  const frameColor = getPortraitFrameColor();
 
   ctx.save();
   ctx.fillStyle = "#fffdf8";
@@ -1645,6 +1636,10 @@ function drawPattern(ctx, width, height, scaleRatio = 1) {
 
 function getPatternPickerColor() {
   return state.patternColor ?? mixHex(state.baseColor, "#5e5a54", 0.24);
+}
+
+function getPortraitFrameColor() {
+  return mixHex(getPatternPickerColor(), "#050505", 0.22);
 }
 
 function getPatternColors(hex, patternHex = null) {
