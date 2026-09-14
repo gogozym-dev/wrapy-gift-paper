@@ -195,8 +195,10 @@ const accessoryDock = document.querySelector(".accessory-dock");
 const colorSwatches = document.querySelector("#colorSwatches");
 const printMeta = document.querySelector("#printMeta");
 const zoomValue = document.querySelector("#zoomValue");
+let portraitStageDisplayWidth = portraitStage.clientWidth || portraitStage.getBoundingClientRect().width || 360;
 
 function init() {
+  setupPortraitStageMeasurement();
   renderAccessoryDock();
   renderIcons();
 
@@ -222,6 +224,17 @@ function init() {
   render();
   ensureAllCopyFontsLoaded().then(render);
   setupPreviewHeightSync();
+}
+
+function setupPortraitStageMeasurement() {
+  getPortraitStageDisplayWidth();
+  if (!("ResizeObserver" in window)) return;
+
+  const observer = new ResizeObserver((entries) => {
+    const width = entries[0]?.contentRect.width;
+    if (width > 0) portraitStageDisplayWidth = width;
+  });
+  observer.observe(portraitStage);
 }
 
 function setupPreviewHeightSync() {
@@ -666,7 +679,7 @@ function handleUpload(event) {
 }
 
 function resetPortraitPlacement() {
-  const stageWidth = portraitStage.clientWidth || portraitStage.getBoundingClientRect().width || 360;
+  const stageWidth = getPortraitStageDisplayWidth();
   state.portrait = {
     x: 50,
     y: 50,
@@ -1557,13 +1570,17 @@ function drawTrimmedAccessory(ctx, image, assetId, maxSize) {
 }
 
 function getAccessoryStageToTileScale(tileWidth) {
-  const width = accessoryLayer.clientWidth || accessoryLayer.getBoundingClientRect().width;
-  return width > 0 ? tileWidth / width : 1;
+  return tileWidth / getPortraitStageDisplayWidth();
 }
 
 function getStageToCanvasScale() {
-  const width = portraitCanvas.clientWidth || portraitCanvas.getBoundingClientRect().width;
-  return width > 0 ? portraitCanvas.width / width : 1;
+  return portraitCanvas.width / getPortraitStageDisplayWidth();
+}
+
+function getPortraitStageDisplayWidth() {
+  const measuredWidth = portraitStage.clientWidth || portraitStage.getBoundingClientRect().width;
+  if (measuredWidth > 0) portraitStageDisplayWidth = measuredWidth;
+  return portraitStageDisplayWidth;
 }
 
 function getMaxEditableSize(rect) {
