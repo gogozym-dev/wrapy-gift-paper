@@ -579,7 +579,11 @@ select {
 .avatar-frame-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--ui-border);
+  border-radius: 14px;
+  background: #f0f0ed;
 }
 
 .avatar-frame-option {
@@ -588,21 +592,30 @@ select {
   justify-content: center;
   gap: 5px;
   min-width: 0;
-  min-height: 34px;
+  min-height: 36px;
   padding: 0 7px;
-  border: 1px solid var(--ui-border);
-  border-radius: 12px;
+  border: 0;
+  border-radius: 10px;
   background: transparent;
-  color: #555;
+  color: #333;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
   box-shadow: none;
+  transition: color 140ms ease, background-color 140ms ease, transform 100ms ease;
+}
+
+.avatar-frame-option:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.avatar-frame-option:active {
+  transform: scale(0.98);
 }
 
 .avatar-frame-option.active {
-  border-color: #050505;
-  color: #050505;
+  background: #050505;
+  color: #ffffff;
 }
 
 .avatar-frame-preview {
@@ -614,7 +627,11 @@ select {
 }
 
 .avatar-frame-preview-none {
-  background: rgba(37, 72, 58, 0.12);
+  background: #c9cbc8;
+}
+
+.avatar-frame-option.active .avatar-frame-preview-none {
+  background: #ffffff;
 }
 
 .avatar-frame-preview-circle {
