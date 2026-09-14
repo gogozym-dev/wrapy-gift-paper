@@ -464,16 +464,6 @@
   box-shadow: none;
 }
 
-.studio-tool-nav button:not(:first-child)::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  bottom: 14px;
-  left: -1px;
-  width: 1px;
-  background: rgba(205, 199, 189, 0.48);
-}
-
 .studio-tool-nav button:hover {
   background: rgba(5, 5, 5, 0.045);
   color: #111;
@@ -482,11 +472,6 @@
 .studio-tool-nav button.is-active {
   background: #111;
   color: #fff;
-}
-
-.studio-tool-nav button.is-active::before,
-.studio-tool-nav button.is-active + button::before {
-  opacity: 0;
 }
 
 .studio-tool-icon,
