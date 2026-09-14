@@ -377,6 +377,10 @@
 
 .studio-editor .text-controls textarea {
   min-height: 104px;
+  border-color: rgba(205, 199, 189, 0.56);
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .studio-editor .copy-style-controls {
