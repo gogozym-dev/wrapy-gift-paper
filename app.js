@@ -1,13 +1,14 @@
 const DEFAULT_REPEAT_DENSITY = 158;
 const DEFAULT_PAPER_IMAGE_SCALE = 0.812;
 const PAPER_IMAGE_SIZE_BASE = 132;
-const DEFAULT_BASE_COLOR = "#fafcff";
-const DEFAULT_PATTERN_COLOR = "#24c8ff";
+const DEFAULT_BASE_COLOR = "#ffffff";
+const DEFAULT_PATTERN_COLOR = "#dff4fc";
 const DRAG_START_THRESHOLD = 4;
 
 const state = {
   baseColor: DEFAULT_BASE_COLOR,
   patternColor: DEFAULT_PATTERN_COLOR,
+  selectedPatternPresetId: "palette-blue",
   pattern: "stripe",
   image: null,
   portraitFrame: "none",
@@ -32,12 +33,12 @@ const state = {
 };
 
 const colors = [
-  { name: "冰白", value: DEFAULT_BASE_COLOR },
-  { name: "樱粉", value: "#fff5f6" },
-  { name: "鼠尾草", value: "#f7faef" },
-  { name: "雾蓝", value: "#f5f8fc" },
-  { name: "薰衣草", value: "#f8f5fc" },
-  { name: "燕麦", value: "#faf7f2" },
+  { id: "palette-blue", name: "浅蓝纹路", value: "#dff4fc" },
+  { id: "palette-lime-a", name: "荧光黄绿纹路", value: "#defb54" },
+  { id: "palette-pink", name: "糖果粉纹路", value: "#f9dcff" },
+  { id: "palette-lavender", name: "薰衣草紫纹路", value: "#e0dbff" },
+  { id: "palette-orange", name: "杏橙纹路", value: "#ffdb94" },
+  { id: "palette-lime-b", name: "活力黄绿纹路", value: "#defb54" },
 ];
 const PREVIEW_BASE_WIDTH = 1120;
 const SYSTEM_FONT_STACK = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif';
@@ -215,15 +216,18 @@ function init() {
     const button = document.createElement("button");
     button.className = "swatch";
     button.type = "button";
+    button.dataset.preset = color.id;
     button.dataset.color = color.value;
     button.style.setProperty("--swatch-color", color.value);
     button.innerHTML = `<span class="swatch-check ui-icon" aria-hidden="true">${iconSvg("check")}</span>`;
     button.title = color.name;
     button.setAttribute("aria-label", color.name);
     button.addEventListener("click", () => {
-      state.baseColor = color.value;
-      customColor.value = color.value;
-      state.patternColor = null;
+      state.baseColor = DEFAULT_BASE_COLOR;
+      state.patternColor = color.value;
+      state.selectedPatternPresetId = color.id;
+      customColor.value = DEFAULT_BASE_COLOR;
+      patternCustomColor.value = color.value;
       render();
     });
     colorSwatches.append(button);
@@ -317,11 +321,11 @@ function bindEvents() {
   });
   customColor.addEventListener("input", (event) => {
     state.baseColor = event.target.value;
-    state.patternColor = null;
     render();
   });
   patternCustomColor.addEventListener("input", (event) => {
     state.patternColor = event.target.value;
+    state.selectedPatternPresetId = null;
     render();
   });
   patternSelect.addEventListener("change", (event) => {
@@ -735,11 +739,11 @@ function render() {
 }
 
 function updateControls() {
-  const isCustomBaseColor = !colors.some((color) => color.value === state.baseColor);
-  const isCustomPatternColor = Boolean(state.patternColor);
+  const isCustomBaseColor = state.baseColor.toLowerCase() !== DEFAULT_BASE_COLOR;
+  const isCustomPatternColor = state.selectedPatternPresetId === null;
 
   [...colorSwatches.children].forEach((button) => {
-    button.classList.toggle("active", button.dataset.color === state.baseColor);
+    button.classList.toggle("active", button.dataset.preset === state.selectedPatternPresetId);
   });
   customColor.value = state.baseColor;
   patternCustomColor.value = getPatternPickerColor();
@@ -1739,6 +1743,14 @@ function getPortraitFrameColor() {
 function getPatternColors(hex, patternHex = null) {
   const base = hexToRgb(hex);
   const patternBase = patternHex ? hexToRgb(patternHex) : base;
+  if (patternHex) {
+    const color = rgba(patternBase, 1);
+    return {
+      deep: color,
+      medium: color,
+      dots: [color, color, color],
+    };
+  }
   const deep = mixRgb(patternBase, { r: 58, g: 56, b: 52 }, patternHex ? 0.12 : 0.38);
   const medium = mixRgb(patternBase, { r: 58, g: 56, b: 52 }, patternHex ? 0.06 : 0.26);
   const light = mixRgb(base, { r: 255, g: 255, b: 255 }, 0.42);
