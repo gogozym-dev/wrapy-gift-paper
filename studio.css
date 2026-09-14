@@ -246,7 +246,7 @@
   display: block;
   grid-row: 3;
   justify-self: center;
-  width: min(1200px, calc(100vw - 72px));
+  width: min(1200px, calc(100vw - 32px));
   min-height: 70px;
   height: 70px;
   padding: 6px;
