@@ -97,6 +97,8 @@
   z-index: 50;
   display: block;
   grid-row: 3;
+  justify-self: center;
+  width: min(1200px, calc(100vw - 72px));
   min-height: 70px;
   height: 70px;
   padding: 6px;
