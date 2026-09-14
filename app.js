@@ -77,6 +77,7 @@ const ICONS = {
     '<circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="7" r="1.2" fill="currentColor" stroke="none"/><circle cx="17" cy="7" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="17" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="7" cy="17" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="17" r="1.2" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.2" fill="currentColor" stroke="none"/>',
   heart:
     '<path d="M12 18.4 6.6 13.1c-1.8-1.7-2.1-3.8-.8-5.2 1.3-1.5 3.6-1.4 5.1.2L12 9.2l1.1-1.1c1.5-1.6 3.8-1.7 5.1-.2 1.3 1.4 1 3.5-.8 5.2z"/>',
+  "maximize-2": '<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>',
   minus: '<path d="M5 12h14"/>',
   plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
   "reset-view": '<path d="M6.5 7.5A7 7 0 1 1 5 12"/><path d="M6.5 4.5v3h3"/><path d="M9 12h6"/>',
@@ -183,6 +184,11 @@ const paperCanvas = document.querySelector("#paperCanvas");
 const paperCtx = paperCanvas.getContext("2d");
 const paperPreviewShell = document.querySelector(".paper-preview-shell");
 const paperFrame = document.querySelector(".paper-frame");
+const previewHomeHost = document.querySelector("#previewHomeHost");
+const previewDetailModal = document.querySelector("#previewDetailModal");
+const previewDetailCanvasHost = document.querySelector("#previewDetailCanvasHost");
+const previewDetailOpen = document.querySelector("#previewDetailOpen");
+const previewDetailClose = document.querySelector("#previewDetailClose");
 const emptyState = document.querySelector("#emptyState");
 const stageUploadButton = document.querySelector("#stageUploadButton");
 const addAccessoryButton = document.querySelector("#addAccessory");
@@ -393,6 +399,15 @@ function bindEvents() {
   document.querySelector("#zoomOutBtn").addEventListener("click", () => setPreviewZoom(state.previewZoom - 0.25));
   document.querySelector("#zoomInBtn").addEventListener("click", () => setPreviewZoom(state.previewZoom + 0.25));
   document.querySelector("#zoomResetBtn").addEventListener("click", resetPreviewZoom);
+  previewDetailOpen?.addEventListener("click", openPreviewDetail);
+  previewDetailClose?.addEventListener("click", closePreviewDetail);
+  previewDetailModal?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closePreviewDetail();
+  });
+  previewDetailModal?.addEventListener("click", (event) => {
+    if (event.target === previewDetailModal) closePreviewDetail();
+  });
   window.addEventListener("keydown", handleKeyboardShortcuts);
 
   addAccessoryButton.addEventListener("click", () => {
@@ -817,6 +832,35 @@ function updateRangeFill(input) {
   const value = Number(input.value || min);
   const progress = max === min ? 0 : ((value - min) / (max - min)) * 100;
   input.style.setProperty("--range-progress", `${clamp(progress, 0, 100)}%`);
+}
+
+function openPreviewDetail() {
+  if (!previewDetailModal || !previewDetailCanvasHost || !previewHomeHost) return;
+
+  state.previewZoom = 1;
+  previewDetailModal.showModal();
+  previewDetailCanvasHost.append(paperPreviewShell);
+  document.body.classList.add("preview-detail-open");
+
+  requestAnimationFrame(() => {
+    updatePreviewZoom();
+    renderPaper();
+    paperFrame.scrollTo({ left: 0, top: 0 });
+    previewDetailClose?.focus({ preventScroll: true });
+  });
+}
+
+function closePreviewDetail() {
+  if (!previewDetailModal || !previewHomeHost) return;
+
+  state.previewZoom = 1;
+  previewHomeHost.append(paperPreviewShell);
+  updatePreviewZoom();
+  renderPaper();
+  paperFrame.scrollTo({ left: 0, top: 0 });
+  document.body.classList.remove("preview-detail-open");
+  if (previewDetailModal.open) previewDetailModal.close();
+  previewDetailOpen?.focus({ preventScroll: true });
 }
 
 function setPreviewZoom(value) {

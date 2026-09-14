@@ -18,7 +18,7 @@
     />
     <meta property="og:url" content="https://mengmengwrapy.xyz/studio.html" />
     <link rel="stylesheet" href="./styles.css?v=20260914-2" />
-    <link rel="stylesheet" href="./studio.css?v=20260915-1" />
+    <link rel="stylesheet" href="./studio.css?v=20260915-2" />
   </head>
   <body class="studio-page">
     <main class="app-shell studio-shell">
@@ -281,28 +281,23 @@
           <div>
             <h2><span>预览</span><small>Preview</small></h2>
           </div>
-          <button id="downloadBtn" type="button">
-            <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
-            <span>下载图纸</span>
-          </button>
-        </div>
-        <div class="paper-preview-shell">
-          <div class="paper-frame">
-            <canvas id="paperCanvas" width="1120" height="760"></canvas>
+          <div class="preview-toolbar-actions">
+            <button class="preview-detail-trigger" id="previewDetailOpen" type="button" aria-haspopup="dialog">
+              <span class="ui-icon" data-icon="maximize-2" aria-hidden="true"></span>
+              <span>放大查看</span>
+            </button>
+            <button id="downloadBtn" type="button">
+              <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
+              <span>下载图纸</span>
+            </button>
           </div>
         </div>
-        <div class="preview-zoom-controls" aria-label="预览缩放">
-          <button id="zoomOutBtn" type="button" title="缩小">
-            <span class="zoom-symbol" aria-hidden="true">-</span>
-          </button>
-          <span id="zoomValue">100%</span>
-          <button id="zoomInBtn" type="button" title="放大">
-            <span class="zoom-symbol" aria-hidden="true">+</span>
-          </button>
-          <button id="zoomResetBtn" type="button">
-            <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
-            <span>回位</span>
-          </button>
+        <div class="preview-home-host" id="previewHomeHost">
+          <div class="paper-preview-shell">
+            <div class="paper-frame">
+              <canvas id="paperCanvas" width="1120" height="760"></canvas>
+            </div>
+          </div>
         </div>
       </section>
       <div class="poster-shape shape-purple" aria-hidden="true"></div>
@@ -310,6 +305,31 @@
       <div class="poster-shape shape-blue" aria-hidden="true"></div>
       <div class="poster-shape shape-orange" aria-hidden="true"></div>
     </main>
+
+    <dialog class="preview-detail-modal" id="previewDetailModal" aria-labelledby="previewDetailTitle">
+      <div class="preview-detail-surface">
+        <h2 class="visually-hidden" id="previewDetailTitle">图纸详情</h2>
+        <button class="preview-detail-close" id="previewDetailClose" type="button" aria-label="关闭图纸详情">
+          <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+        </button>
+        <div class="preview-detail-canvas-host" id="previewDetailCanvasHost"></div>
+        <div class="preview-detail-controls">
+          <div class="preview-zoom-controls" aria-label="预览缩放">
+            <button id="zoomOutBtn" type="button" title="缩小" aria-label="缩小图纸">
+              <span class="zoom-symbol" aria-hidden="true">-</span>
+            </button>
+            <span id="zoomValue" aria-live="polite">100%</span>
+            <button id="zoomInBtn" type="button" title="放大" aria-label="放大图纸">
+              <span class="zoom-symbol" aria-hidden="true">+</span>
+            </button>
+            <button id="zoomResetBtn" type="button">
+              <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
+              <span>回位</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
 
     <dialog class="accessory-modal" id="accessoryModal" aria-labelledby="accessoryModalTitle">
       <div class="accessory-modal-card">
@@ -352,7 +372,7 @@
       </div>
     </dialog>
 
-    <script src="./app.js?v=20260914-3"></script>
+    <script src="./app.js?v=20260915-4"></script>
     <script src="./studio.js?v=20260914-3"></script>
   </body>
 </html>
