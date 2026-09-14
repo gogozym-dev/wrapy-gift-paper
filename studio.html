@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mengmeng Wrap Studio - 个性化礼物包装纸生成器</title>
+    <meta
+      name="description"
+      content="上传人物头像、添加可爱配饰，自定义颜色、纹路与文案，生成可高清打印的个性化礼物包装纸。"
+    />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://mengmengwrapy.xyz/studio.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mengmeng Wrap Studio - 个性化礼物包装纸生成器" />
+    <meta
+      property="og:description"
+      content="上传头像、添加配饰，自定义颜色、纹路与文案，生成可高清打印的礼物包装纸。"
+    />
+    <meta property="og:url" content="https://mengmengwrapy.xyz/studio.html" />
+    <link rel="stylesheet" href="./styles.css?v=20260914-1" />
+    <link rel="stylesheet" href="./studio.css?v=20260914-1" />
+  </head>
+  <body class="studio-page">
+    <main class="app-shell studio-shell">
+      <header class="studio-brand" aria-label="Mengmeng Wrap">
+        <img src="./assets/mengmeng-wrap-logo.png" alt="Mengmeng Wrap" />
+      </header>
+
+      <section class="editor-panel studio-editor" aria-label="底部编辑区">
+        <div class="panel-head editor-title">
+          <h2><span>编辑</span><small>Edit</small></h2>
+        </div>
+
+        <div class="editor-section avatar-section" data-studio-panel="avatar">
+          <div class="section-title">
+            <span class="section-badge">A</span>
+            <strong>头像</strong>
+            <small>Avatar</small>
+          </div>
+          <div class="avatar-workbench">
+            <div class="portrait-stage" id="portraitStage">
+              <input id="personUpload" type="file" accept="image/*" />
+              <input id="accessoryUpload" type="file" accept="image/*" />
+              <canvas id="portraitCanvas" width="360" height="360"></canvas>
+              <button class="portrait-transform" id="portraitTransform" type="button" aria-label="移动头像">
+                <span class="close-handle portrait-close-handle" aria-hidden="true">
+                  <span class="ui-icon" data-icon="x"></span>
+                </span>
+                <span class="rotate-handle portrait-rotate-handle" aria-hidden="true">
+                  <span class="ui-icon" data-icon="rotate-cw"></span>
+                </span>
+                <span class="resize-handle portrait-resize-handle" aria-hidden="true"></span>
+                <span class="box-handle box-handle-top" aria-hidden="true"></span>
+                <span class="box-handle box-handle-left" aria-hidden="true"></span>
+                <span class="box-handle box-handle-right" aria-hidden="true"></span>
+                <span class="box-handle box-handle-bottom" aria-hidden="true"></span>
+              </button>
+              <div class="accessory-layer" id="accessoryLayer"></div>
+              <div class="empty-state" id="emptyState">
+                <span class="ui-icon empty-state-icon" data-icon="plus" aria-hidden="true"></span>
+                <span>上传人物头像</span>
+              </div>
+            </div>
+
+            <div class="avatar-actions">
+              <button class="stage-upload-button" id="stageUploadButton" type="button">
+                <span class="ui-icon" data-icon="avatar-upload" aria-hidden="true"></span>
+                <span>上传头像</span>
+              </button>
+              <div class="avatar-frame-options" aria-label="头像边框样式">
+                <button class="avatar-frame-option active" type="button" data-portrait-frame="none" aria-pressed="true">
+                  <span class="avatar-frame-preview avatar-frame-preview-none" aria-hidden="true"></span>
+                  <span>无框</span>
+                </button>
+                <button class="avatar-frame-option" type="button" data-portrait-frame="circle" aria-pressed="false">
+                  <span class="avatar-frame-preview avatar-frame-preview-circle" aria-hidden="true"></span>
+                  <span>圆形框</span>
+                </button>
+              </div>
+              <label class="frame-color-control" id="frameColorControl" hidden>
+                <span>花边颜色</span>
+                <input id="frameColor" type="color" value="#a44843" aria-label="花边颜色" />
+              </label>
+              <div class="accessory-picker">
+                <button class="add-button" id="addAccessory" type="button">
+                  <span class="ui-icon" data-icon="accessory-add" aria-hidden="true"></span>
+                  <span>添加配饰</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-section color-section" data-studio-panel="color">
+          <div class="section-title">
+            <span class="section-badge">B</span>
+            <strong>颜色</strong>
+            <small>Color</small>
+          </div>
+          <div class="color-row">
+            <div class="swatches" id="colorSwatches" aria-label="底色选择"></div>
+            <div class="custom-color-picker" id="customColorPicker">
+              <button class="custom-color-trigger" id="customColorToggle" type="button" aria-label="自定义颜色"></button>
+              <div class="custom-color-menu" id="customColorMenu" aria-label="自定义颜色类型">
+                <button class="custom-color-option" id="baseColorOption" type="button">自定义底色</button>
+                <button class="custom-color-option" id="patternColorOption" type="button">自定义纹路颜色</button>
+              </div>
+              <input id="customColor" class="visually-hidden" type="color" value="#fafcff" aria-label="自定义底色" />
+              <input id="patternCustomColor" class="visually-hidden" type="color" value="#24c8ff" aria-label="自定义纹路色" />
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-section" data-studio-panel="pattern">
+          <div class="section-title">
+            <span class="section-badge">C</span>
+            <strong>纹路</strong>
+            <small>Pattern</small>
+          </div>
+          <div class="pattern-options" aria-label="纹路选择">
+            <button class="pattern-pill" type="button" data-pattern="confetti">
+              <span class="pattern-icon ui-icon" data-icon="grip" aria-hidden="true"></span>点点
+            </button>
+            <button class="pattern-pill active" type="button" data-pattern="stripe">
+              <span class="pattern-icon ui-icon pattern-icon-stripe" data-icon="stripe" aria-hidden="true"></span>斜纹
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="grid">
+              <span class="pattern-icon ui-icon" data-icon="grid-3x3" aria-hidden="true"></span>格纹
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="heart">
+              <span class="pattern-icon ui-icon pattern-icon-heart" data-icon="heart" aria-hidden="true"></span>爱心
+            </button>
+            <button class="pattern-pill" type="button" data-pattern="star">
+              <span class="pattern-icon ui-icon pattern-icon-star" data-icon="star" aria-hidden="true"></span>星星
+            </button>
+          </div>
+          <select id="patternSelect" class="visually-hidden" tabindex="-1" aria-hidden="true">
+            <option value="confetti">点点</option>
+            <option value="stripe">斜纹</option>
+            <option value="grid">格纹</option>
+            <option value="heart">爱心</option>
+            <option value="star">星星</option>
+          </select>
+        </div>
+
+        <div class="editor-section" data-studio-panel="text">
+          <div class="section-title">
+            <span class="section-badge">D</span>
+            <strong>文案</strong>
+            <small>Text</small>
+          </div>
+          <div class="text-controls">
+            <textarea id="copyText" rows="3">happy brithday</textarea>
+            <div class="copy-style-controls">
+              <label class="copy-option copy-color-control">
+                <span>字体颜色</span>
+                <input id="copyColor" type="color" value="#050505" aria-label="字体颜色" />
+              </label>
+              <label class="copy-size-control">
+                <span>文字大小</span>
+                <input id="copySize" type="range" min="10" max="28" value="14" />
+              </label>
+              <div class="copy-option copy-position-control">
+                <span>文字位置</span>
+                <div class="position-sliders">
+                  <label>
+                    <span>横</span>
+                    <input id="copyOffsetX" type="range" min="-60" max="60" value="0" aria-label="文字横向位置" />
+                  </label>
+                  <label>
+                    <span>纵</span>
+                    <input id="copyOffsetY" type="range" min="-60" max="90" value="0" aria-label="文字纵向位置" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-section studio-font-section" data-studio-panel="font">
+          <div class="section-title">
+            <span class="section-badge">E</span>
+            <strong>字体</strong>
+            <small>Font</small>
+          </div>
+          <div class="studio-font-picker">
+            <button
+              class="copy-font-trigger"
+              id="copyFontTrigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="fontModal"
+              aria-expanded="false"
+            >
+              <span class="studio-font-current">
+                <small>当前字体</small>
+                <strong id="copyFontLabel">Fredoka</strong>
+              </span>
+              <span class="studio-font-action">选择字体</span>
+              <span class="ui-icon" data-icon="chevron-down" aria-hidden="true"></span>
+            </button>
+            <select id="copyFont" class="visually-hidden" tabindex="-1" aria-hidden="true">
+              <option value="fredoka" selected>Fredoka</option>
+              <option value="dynapuff">DynaPuff</option>
+              <option value="sour-gummy">Sour Gummy</option>
+              <option value="baloo-2">Baloo 2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="editor-section" data-studio-panel="density">
+          <div class="section-title">
+            <span class="section-badge">F</span>
+            <strong>画纸设置</strong>
+            <small>Paper</small>
+          </div>
+          <div class="paper-settings">
+            <label class="field field-inline">
+              <select id="paperSizeSelect">
+                <option value="cm-70-50">70 × 50 cm</option>
+                <option value="cm-100-70">100 × 70 cm</option>
+                <option value="in-30-20">30 × 20 in</option>
+                <option value="in-36-24">36 × 24 in</option>
+              </select>
+            </label>
+            <label class="slider-row">
+              <span>重复密度</span>
+              <input id="repeatDensity" type="range" min="90" max="190" value="158" />
+            </label>
+            <label class="slider-row">
+              <span>图案大小</span>
+              <input id="paperImageScale" type="range" min="38" max="110" step="0.1" value="81.2" />
+            </label>
+          </div>
+        </div>
+
+        <nav class="studio-tool-nav" aria-label="包装纸编辑工具">
+          <button type="button" data-studio-tool="avatar" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="avatar-upload" aria-hidden="true"></span>
+            <span>头像</span>
+          </button>
+          <button type="button" data-studio-tool="color" aria-expanded="false">
+            <span class="studio-tool-color" aria-hidden="true"></span>
+            <span>颜色</span>
+          </button>
+          <button type="button" data-studio-tool="pattern" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="stripe" aria-hidden="true"></span>
+            <span>纹路</span>
+          </button>
+          <button type="button" data-studio-tool="text" aria-expanded="false">
+            <span class="studio-tool-glyph" aria-hidden="true">T</span>
+            <span>文案</span>
+          </button>
+          <button type="button" data-studio-tool="font" aria-expanded="false">
+            <span class="studio-tool-glyph studio-tool-glyph-wide" aria-hidden="true">Aa</span>
+            <span>字体</span>
+          </button>
+          <button type="button" data-studio-tool="density" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="grid-3x3" aria-hidden="true"></span>
+            <span>密度</span>
+          </button>
+        </nav>
+      </section>
+
+      <section class="preview-panel studio-preview" aria-label="图纸预览区">
+        <div class="preview-toolbar">
+          <div>
+            <h2><span>预览</span><small>Preview</small></h2>
+          </div>
+          <button id="downloadBtn" type="button">
+            <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
+            <span>下载图纸</span>
+          </button>
+        </div>
+        <div class="paper-preview-shell">
+          <div class="paper-frame">
+            <canvas id="paperCanvas" width="1120" height="760"></canvas>
+          </div>
+        </div>
+        <div class="preview-zoom-controls" aria-label="预览缩放">
+          <button id="zoomOutBtn" type="button" title="缩小">
+            <span class="zoom-symbol" aria-hidden="true">-</span>
+          </button>
+          <span id="zoomValue">100%</span>
+          <button id="zoomInBtn" type="button" title="放大">
+            <span class="zoom-symbol" aria-hidden="true">+</span>
+          </button>
+          <button id="zoomResetBtn" type="button">
+            <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
+            <span>回位</span>
+          </button>
+        </div>
+      </section>
+      <div class="poster-shape shape-purple" aria-hidden="true"></div>
+      <div class="poster-shape shape-lime" aria-hidden="true"></div>
+      <div class="poster-shape shape-blue" aria-hidden="true"></div>
+      <div class="poster-shape shape-orange" aria-hidden="true"></div>
+    </main>
+
+    <dialog class="accessory-modal" id="accessoryModal" aria-labelledby="accessoryModalTitle">
+      <div class="accessory-modal-card">
+        <div class="accessory-modal-head">
+          <h3 id="accessoryModalTitle">添加配饰</h3>
+          <button class="accessory-modal-close" id="accessoryModalClose" type="button" aria-label="关闭配饰选择">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="accessory-dock" aria-label="配饰选择"></div>
+      </div>
+    </dialog>
+
+    <dialog class="accessory-modal font-modal" id="fontModal" aria-labelledby="fontModalTitle">
+      <div class="accessory-modal-card font-modal-card">
+        <div class="accessory-modal-head">
+          <h3 id="fontModalTitle">选择字体</h3>
+          <button class="accessory-modal-close" id="fontModalClose" type="button" aria-label="关闭字体选择">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="font-options" aria-label="字体选择">
+          <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
+            <span class="font-option-name">Fredoka</span>
+            <span class="font-option-preview font-preview-fredoka">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
+            <span class="font-option-name">DynaPuff</span>
+            <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
+            <span class="font-option-name">Sour Gummy</span>
+            <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
+          </button>
+          <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
+            <span class="font-option-name">Baloo 2</span>
+            <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./app.js?v=20260914-1"></script>
+    <script src="./studio.js?v=20260914-1"></script>
+  </body>
+</html>
