@@ -272,8 +272,13 @@ h2 small {
 }
 
 .accessory.is-loading::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
   width: 22px;
   height: 22px;
+  margin: -11px 0 0 -11px;
   border: 2px solid rgba(5, 5, 5, 0.16);
   border-top-color: #050505;
   border-radius: 50%;
@@ -282,10 +287,15 @@ h2 small {
 }
 
 .accessory.is-error::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
   color: #6d6963;
   content: "重试";
   font-size: 12px;
   font-weight: 700;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes accessory-loading {

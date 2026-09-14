@@ -142,9 +142,12 @@ const accessoryAssets = [
   },
 ].map((asset) => ({
   ...asset,
-  previewSrc: asset.src.replace("/accessories/", "/accessories/thumbs/"),
+  previewSrc: asset.src
+    .replace("/accessories/", "/accessories/thumbs/")
+    .replace(/\.png$/i, ".webp"),
 }));
 const accessoryImageMap = new Map();
+const accessoryPreviewImageMap = new Map();
 const accessoryLoadPromiseMap = new Map();
 const accessoryTrimMap = new Map();
 
@@ -412,6 +415,8 @@ function bindEvents() {
     button.setAttribute("aria-busy", "true");
     try {
       await ensureCopyFontLoaded();
+      const accessoryIds = [...new Set(state.accessories.map((item) => item.assetId))];
+      await Promise.all(accessoryIds.map((assetId) => loadAccessoryAsset(assetId).catch(() => null)));
       const exportCanvas = createPrintCanvas();
       const link = document.createElement("a");
       const spec = getPrintSpec();
@@ -521,6 +526,8 @@ function renderAccessoryDock() {
     previewImage.loading = "eager";
     previewImage.decoding = "async";
     previewImage.addEventListener("load", () => {
+      accessoryPreviewImageMap.set(asset.id, previewImage);
+      if (!accessoryImageMap.has(asset.id)) measureAccessoryTrim(asset.id, previewImage);
       previewImage.hidden = false;
       button.classList.remove("is-loading", "is-error");
       button.title = asset.name;
@@ -544,6 +551,11 @@ function renderAccessoryDock() {
       state.selectedAssetId = asset.id;
       await addAccessoryFromAsset(asset.id, button);
     });
+    button.addEventListener(
+      "pointerenter",
+      () => loadAccessoryAsset(asset.id).catch(() => null),
+      { once: true },
+    );
     accessoryDock.append(button);
   });
 
@@ -559,6 +571,18 @@ function renderAccessoryDock() {
 
 async function addAccessoryFromAsset(assetId, button) {
   if (!state.image) {
+    return;
+  }
+
+  const previewImage = accessoryPreviewImageMap.get(assetId);
+  if (previewImage?.complete && previewImage.naturalWidth) {
+    insertAccessory(assetId);
+    state.accessoryDockOpen = false;
+    render();
+    addAccessoryButton.focus();
+    loadAccessoryAsset(assetId)
+      .then(render)
+      .catch(() => null);
     return;
   }
 
@@ -1191,10 +1215,14 @@ function getAccessoryTrim(assetId) {
   const trim = accessoryTrimMap.get(assetId);
   if (trim) return trim;
 
-  const image = accessoryImageMap.get(assetId);
+  const image = getLoadedAccessoryImage(assetId);
   const width = image?.naturalWidth || image?.width || 1;
   const height = image?.naturalHeight || image?.height || 1;
   return getFullAccessoryTrim(width, height);
+}
+
+function getLoadedAccessoryImage(assetId) {
+  return accessoryImageMap.get(assetId) || accessoryPreviewImageMap.get(assetId);
 }
 
 function getAccessoryDisplayBox(assetId, maxSize) {
@@ -1547,7 +1575,7 @@ function makePortraitTile() {
   ctx.drawImage(portraitCanvas, 0, 0);
 
   state.accessories.forEach((item) => {
-    const image = accessoryImageMap.get(item.assetId);
+    const image = getLoadedAccessoryImage(item.assetId);
     if (!image?.complete) return;
 
     ctx.save();
