@@ -946,48 +946,23 @@ function renderPortrait() {
 }
 
 function drawCirclePortrait(ctx, image, size) {
-  const frameCenterY = size * 0.012;
-  const imageHalfWidth = size * 0.282;
-  const imageHalfHeight = size * 0.348;
   const frameColor = getPortraitFrameColor();
+  const borderWidth = Math.max(2, size * 0.026);
+  const radius = Math.max(0, size / 2 - borderWidth / 2);
 
   ctx.save();
-  ctx.fillStyle = "#ffffff";
-  traceVintageFrameOuterPath(ctx, size, frameCenterY);
-  ctx.fill();
-
-  ctx.save();
-  traceVintageFrameOpeningPath(ctx, size, frameCenterY);
+  ctx.beginPath();
+  ctx.arc(0, 0, radius - borderWidth / 2, 0, Math.PI * 2);
   ctx.clip();
-  drawImageCover(
-    ctx,
-    image,
-    -imageHalfWidth,
-    frameCenterY - imageHalfHeight,
-    imageHalfWidth * 2,
-    imageHalfHeight * 2,
-  );
+  drawImageCover(ctx, image, -radius, -radius, radius * 2, radius * 2);
   ctx.restore();
 
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, Math.PI * 2);
   ctx.strokeStyle = frameColor;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.lineWidth = Math.max(1.6, size * 0.008);
-  traceVintageFrameOuterPath(ctx, size, frameCenterY);
+  ctx.lineWidth = borderWidth;
   ctx.stroke();
-  ctx.lineWidth = Math.max(1.1, size * 0.0055);
-  traceVintageFrameInnerPath(ctx, size, frameCenterY);
-  ctx.stroke();
-  traceVintageFrameOpeningPath(ctx, size, frameCenterY);
-  ctx.stroke();
-
-  drawFrameSideFlourish(ctx, size, frameColor, frameCenterY, -1);
-  drawFrameSideFlourish(ctx, size, frameColor, frameCenterY, 1);
-  drawFrameBow(ctx, size, frameColor);
-  drawFrameFlowerSprig(ctx, -size * 0.33, -size * 0.29, size, frameColor, -0.62);
-  drawFrameFlowerSprig(ctx, size * 0.33, -size * 0.29, size, frameColor, 0.62);
-  drawFrameFlowerSprig(ctx, -size * 0.305, size * 0.34, size, frameColor, -2.42);
-  drawFrameFlowerSprig(ctx, size * 0.305, size * 0.34, size, frameColor, 2.42);
   ctx.restore();
 }
 

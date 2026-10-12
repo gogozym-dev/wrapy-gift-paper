@@ -638,23 +638,11 @@ select {
 }
 
 .avatar-frame-preview-circle {
-  width: 24px;
-  height: 29px;
-  border-radius: 0;
-  color: var(--frame-color, #1c9cc7);
-  background: transparent;
-}
-
-.avatar-frame-preview-circle svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  fill: #ffffff;
-  stroke: currentColor;
-  stroke-width: 1.65;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--frame-color, #1c9cc7);
+  border-radius: 50%;
+  background: #ffffff;
 }
 
 .accessory-picker {
