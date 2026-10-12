@@ -645,6 +645,11 @@ select {
   background: #ffffff;
 }
 
+.avatar-frame-option.active .avatar-frame-preview-circle {
+  border-color: #ffffff;
+  background: transparent;
+}
+
 .accessory-picker {
   min-width: 0;
 }
