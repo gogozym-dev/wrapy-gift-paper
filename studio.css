@@ -275,12 +275,17 @@
   margin: 0;
   padding: 18px;
   overflow: auto;
+  scrollbar-width: none;
   overscroll-behavior: contain;
   border: 1px solid rgba(205, 199, 189, 0.66);
   border-radius: 20px;
   background: #fffefa;
   box-shadow: 0 20px 54px rgba(35, 31, 27, 0.17);
   animation: studio-panel-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.studio-editor .editor-section::-webkit-scrollbar {
+  display: none;
 }
 
 .studio-editor .editor-section.is-open {
