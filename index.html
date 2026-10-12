@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="clarity-project-id" content="ywdgwcton1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wrapy - 个性化礼物包装纸生成器</title>
+    <title>Mengmeng Wrap Studio - 个性化礼物包装纸生成器</title>
     <meta
       name="description"
       content="上传人物头像、添加可爱配饰，自定义颜色、纹路与文案，生成可高清打印的个性化礼物包装纸。"
@@ -12,24 +12,31 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://mengmengwrapy.xyz/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Wrapy - 个性化礼物包装纸生成器" />
+    <meta property="og:title" content="Mengmeng Wrap Studio - 个性化礼物包装纸生成器" />
     <meta
       property="og:description"
       content="上传头像、添加配饰，自定义颜色、纹路与文案，生成可高清打印的礼物包装纸。"
     />
     <meta property="og:url" content="https://mengmengwrapy.xyz/" />
     <link rel="stylesheet" href="./styles.css?v=20260915-5" />
+    <link rel="stylesheet" href="./studio.css?v=20260915-12" />
   </head>
-  <body>
-    <main class="app-shell">
-      <section class="editor-panel" aria-label="人物和背景 DIY 区">
+  <body class="studio-page">
+    <main class="app-shell studio-shell">
+      <header class="studio-brand" aria-label="Mengmeng Wrap">
+        <img src="./assets/mengmeng-wrap-logo.png" alt="Mengmeng Wrap" />
+      </header>
+
+      <section class="editor-panel studio-editor" aria-label="底部编辑区">
         <div class="panel-head editor-title">
           <h2><span>编辑</span><small>Edit</small></h2>
         </div>
 
-        <div class="editor-section avatar-section">
+        <div class="editor-section avatar-section" data-studio-panel="avatar">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭头像面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
           <div class="section-title">
-            <span class="section-badge">A</span>
             <strong>头像</strong>
             <small>Avatar</small>
           </div>
@@ -91,9 +98,11 @@
           </div>
         </div>
 
-        <div class="editor-section color-section">
+        <div class="editor-section color-section" data-studio-panel="color">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭颜色面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
           <div class="section-title">
-            <span class="section-badge">B</span>
             <strong>颜色</strong>
             <small>Color</small>
           </div>
@@ -113,9 +122,11 @@
           </div>
         </div>
 
-        <div class="editor-section">
+        <div class="editor-section" data-studio-panel="pattern">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭纹路面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
           <div class="section-title">
-            <span class="section-badge">C</span>
             <strong>纹路</strong>
             <small>Pattern</small>
           </div>
@@ -145,35 +156,17 @@
           </select>
         </div>
 
-        <div class="editor-section">
+        <div class="editor-section" data-studio-panel="text">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭文案面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
           <div class="section-title">
-            <span class="section-badge">D</span>
             <strong>文案</strong>
             <small>Text</small>
           </div>
           <div class="text-controls">
             <textarea id="copyText" rows="3">happy brithday</textarea>
             <div class="copy-style-controls">
-              <div class="copy-option copy-font-control">
-                <span>字体</span>
-                <button
-                  class="copy-font-trigger"
-                  id="copyFontTrigger"
-                  type="button"
-                  aria-haspopup="dialog"
-                  aria-controls="fontModal"
-                  aria-expanded="false"
-                >
-                  <span id="copyFontLabel">Fredoka</span>
-                  <span class="ui-icon" data-icon="chevron-down" aria-hidden="true"></span>
-                </button>
-                <select id="copyFont" class="visually-hidden" tabindex="-1" aria-hidden="true">
-                  <option value="fredoka" selected>Fredoka</option>
-                  <option value="dynapuff">DynaPuff</option>
-                  <option value="sour-gummy">Sour Gummy</option>
-                  <option value="baloo-2">Baloo 2</option>
-                </select>
-              </div>
               <label class="copy-option copy-color-control">
                 <span>字体颜色</span>
                 <input id="copyColor" type="color" value="#050505" aria-label="字体颜色" />
@@ -199,19 +192,55 @@
           </div>
         </div>
 
-        <div class="editor-section">
+        <div class="editor-section studio-font-section" data-studio-panel="font">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭字体面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
           <div class="section-title">
-            <span class="section-badge">E</span>
+            <strong>字体</strong>
+            <small>Font</small>
+          </div>
+          <div class="font-options studio-font-options" aria-label="字体选择">
+            <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
+              <span class="font-option-name">Fredoka</span>
+              <span class="font-option-preview font-preview-fredoka">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
+              <span class="font-option-name">DynaPuff</span>
+              <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
+              <span class="font-option-name">Sour Gummy</span>
+              <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
+            </button>
+            <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
+              <span class="font-option-name">Baloo 2</span>
+              <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
+            </button>
+            <select id="copyFont" class="visually-hidden" tabindex="-1" aria-hidden="true">
+              <option value="fredoka" selected>Fredoka</option>
+              <option value="dynapuff">DynaPuff</option>
+              <option value="sour-gummy">Sour Gummy</option>
+              <option value="baloo-2">Baloo 2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="editor-section" data-studio-panel="density">
+          <button class="studio-panel-close" type="button" data-studio-close aria-label="关闭画纸设置面板">
+            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+          </button>
+          <div class="section-title">
             <strong>画纸设置</strong>
             <small>Paper</small>
           </div>
           <div class="paper-settings">
             <label class="field field-inline">
               <select id="paperSizeSelect">
-                <option value="cm-70-50">70 × 50 cm</option>
-                <option value="cm-100-70">100 × 70 cm</option>
-                <option value="in-30-20">30 × 20 in</option>
-                <option value="in-36-24">36 × 24 in</option>
+                <option value="cm-70-50">小号 · 70 × 50 cm（书本 / 小礼盒）</option>
+                <option value="cm-90-60">标准 · 90 × 60 cm（鞋盒大小）</option>
+                <option value="cm-100-70">大号 · 100 × 70 cm（大礼盒）</option>
+                <option value="cm-120-80">加大 · 120 × 80 cm（组合礼盒）</option>
               </select>
             </label>
             <label class="slider-row">
@@ -224,35 +253,57 @@
             </label>
           </div>
         </div>
+
+        <nav class="studio-tool-nav" aria-label="包装纸编辑工具">
+          <button type="button" data-studio-tool="avatar" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="avatar-upload" aria-hidden="true"></span>
+            <span>头像</span>
+          </button>
+          <button type="button" data-studio-tool="color" aria-expanded="false">
+            <span class="studio-tool-color" aria-hidden="true"></span>
+            <span>颜色</span>
+          </button>
+          <button type="button" data-studio-tool="pattern" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="stripe" aria-hidden="true"></span>
+            <span>纹路</span>
+          </button>
+          <button type="button" data-studio-tool="text" aria-expanded="false">
+            <span class="studio-tool-glyph" aria-hidden="true">T</span>
+            <span>文案</span>
+          </button>
+          <button type="button" data-studio-tool="font" aria-expanded="false">
+            <span class="studio-tool-glyph studio-tool-glyph-wide" aria-hidden="true">Aa</span>
+            <span>字体</span>
+          </button>
+          <button type="button" data-studio-tool="density" aria-expanded="false">
+            <span class="studio-tool-icon ui-icon" data-icon="grid-3x3" aria-hidden="true"></span>
+            <span>密度</span>
+          </button>
+        </nav>
       </section>
 
-      <section class="preview-panel" aria-label="图纸预览区">
+      <section class="preview-panel studio-preview" aria-label="图纸预览区">
         <div class="preview-toolbar">
           <div>
             <h2><span>预览</span><small>Preview</small></h2>
           </div>
-          <button id="downloadBtn" type="button">
-            <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
-            <span>下载图纸</span>
-          </button>
-        </div>
-        <div class="paper-preview-shell">
-          <div class="paper-frame">
-            <canvas id="paperCanvas" width="1120" height="760"></canvas>
+          <div class="preview-toolbar-actions">
+            <button class="preview-detail-trigger" id="previewDetailOpen" type="button" aria-haspopup="dialog">
+              <span class="ui-icon" data-icon="maximize-2" aria-hidden="true"></span>
+              <span>放大查看</span>
+            </button>
+            <button id="downloadBtn" type="button">
+              <span class="ui-icon" data-icon="download" aria-hidden="true"></span>
+              <span>下载图纸</span>
+            </button>
           </div>
         </div>
-        <div class="preview-zoom-controls" aria-label="预览缩放">
-          <button id="zoomOutBtn" type="button" title="缩小">
-            <span class="zoom-symbol" aria-hidden="true">-</span>
-          </button>
-          <span id="zoomValue">100%</span>
-          <button id="zoomInBtn" type="button" title="放大">
-            <span class="zoom-symbol" aria-hidden="true">+</span>
-          </button>
-          <button id="zoomResetBtn" type="button">
-            <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
-            <span>回位</span>
-          </button>
+        <div class="preview-home-host" id="previewHomeHost">
+          <div class="paper-preview-shell">
+            <div class="paper-frame">
+              <canvas id="paperCanvas" width="1120" height="760"></canvas>
+            </div>
+          </div>
         </div>
       </section>
       <div class="poster-shape shape-purple" aria-hidden="true"></div>
@@ -260,6 +311,31 @@
       <div class="poster-shape shape-blue" aria-hidden="true"></div>
       <div class="poster-shape shape-orange" aria-hidden="true"></div>
     </main>
+
+    <dialog class="preview-detail-modal" id="previewDetailModal" aria-labelledby="previewDetailTitle">
+      <div class="preview-detail-surface">
+        <h2 class="visually-hidden" id="previewDetailTitle">图纸详情</h2>
+        <button class="preview-detail-close" id="previewDetailClose" type="button" aria-label="关闭图纸详情">
+          <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
+        </button>
+        <div class="preview-detail-canvas-host" id="previewDetailCanvasHost"></div>
+        <div class="preview-detail-controls">
+          <div class="preview-zoom-controls" aria-label="预览缩放">
+            <button id="zoomOutBtn" type="button" title="缩小" aria-label="缩小图纸">
+              <span class="zoom-symbol" aria-hidden="true">-</span>
+            </button>
+            <span id="zoomValue" aria-live="polite">100%</span>
+            <button id="zoomInBtn" type="button" title="放大" aria-label="放大图纸">
+              <span class="zoom-symbol" aria-hidden="true">+</span>
+            </button>
+            <button id="zoomResetBtn" type="button">
+              <span class="ui-icon" data-icon="reset-view" aria-hidden="true"></span>
+              <span>回位</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
 
     <dialog class="accessory-modal" id="accessoryModal" aria-labelledby="accessoryModalTitle">
       <div class="accessory-modal-card">
@@ -273,36 +349,8 @@
       </div>
     </dialog>
 
-    <dialog class="accessory-modal font-modal" id="fontModal" aria-labelledby="fontModalTitle">
-      <div class="accessory-modal-card font-modal-card">
-        <div class="accessory-modal-head">
-          <h3 id="fontModalTitle">选择字体</h3>
-          <button class="accessory-modal-close" id="fontModalClose" type="button" aria-label="关闭字体选择">
-            <span class="ui-icon" data-icon="x" aria-hidden="true"></span>
-          </button>
-        </div>
-        <div class="font-options" aria-label="字体选择">
-          <button class="font-option" type="button" data-copy-font="fredoka" aria-pressed="true">
-            <span class="font-option-name">Fredoka</span>
-            <span class="font-option-preview font-preview-fredoka">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="dynapuff" aria-pressed="false">
-            <span class="font-option-name">DynaPuff</span>
-            <span class="font-option-preview font-preview-dynapuff">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="sour-gummy" aria-pressed="false">
-            <span class="font-option-name">Sour Gummy</span>
-            <span class="font-option-preview font-preview-sour-gummy">happy birthday</span>
-          </button>
-          <button class="font-option" type="button" data-copy-font="baloo-2" aria-pressed="false">
-            <span class="font-option-name">Baloo 2</span>
-            <span class="font-option-preview font-preview-baloo-2">happy birthday</span>
-          </button>
-        </div>
-      </div>
-    </dialog>
-
     <script src="./analytics.js?v=20261012-1"></script>
     <script src="./app.js?v=20260915-11"></script>
+    <script src="./studio.js?v=20260915-4"></script>
   </body>
 </html>
