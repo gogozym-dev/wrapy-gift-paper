@@ -252,11 +252,11 @@
   padding: 6px;
   overflow: visible;
   border-radius: 999px;
-  background: rgba(255, 254, 250, 0.95);
+  background: #fff;
   box-shadow:
-    0 16px 42px rgba(35, 31, 27, 0.12),
-    0 0 0 1px rgba(203, 199, 190, 0.42);
-  backdrop-filter: blur(16px);
+    0 16px 42px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.14);
+  backdrop-filter: none;
 }
 
 .studio-editor .editor-title {
@@ -423,19 +423,25 @@
 }
 
 .studio-editor .paper-settings {
-  grid-template-columns: 180px minmax(240px, 1fr) minmax(240px, 1fr);
-  gap: 22px;
-  padding: 6px 0 2px;
+  grid-template-columns: minmax(270px, 1.2fr) minmax(210px, 1fr) minmax(210px, 1fr);
+  gap: 20px;
+  padding: 14px 0 8px;
 }
 
 .studio-editor .paper-settings .field-inline {
-  min-height: 58px;
+  min-height: 68px;
   border: 1px solid rgba(205, 199, 189, 0.66);
-  border-radius: 14px;
+  border-radius: 16px;
+  padding-inline: 16px;
+}
+
+.studio-editor .paper-settings #paperSizeSelect {
+  width: 100%;
+  font-size: 15px;
 }
 
 .studio-editor .slider-row {
-  min-height: 58px;
+  min-height: 68px;
 }
 
 .studio-tool-nav {
@@ -456,7 +462,7 @@
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #4e4d49;
+  color: #333;
   padding: 0 12px;
   font-size: 14px;
   font-weight: 600;
@@ -466,7 +472,7 @@
 
 .studio-tool-nav button:hover {
   background: rgba(5, 5, 5, 0.045);
-  color: #111;
+  color: #1f1f1f;
 }
 
 .studio-tool-nav button.is-active {
@@ -592,7 +598,7 @@
   }
 
   .studio-editor .paper-settings {
-    grid-template-columns: 160px minmax(220px, 1fr) minmax(220px, 1fr);
+    grid-template-columns: minmax(240px, 1.15fr) minmax(190px, 1fr) minmax(190px, 1fr);
   }
 
   .studio-tool-nav {
@@ -745,21 +751,27 @@
   }
 
   .studio-editor .color-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    overflow-x: auto;
+    align-items: center;
+    overflow: visible;
     padding: 6px 2px 12px;
-    scrollbar-width: none;
   }
 
-  .studio-editor .color-row::-webkit-scrollbar {
+  .studio-editor .color-row .swatches::-webkit-scrollbar {
     display: none;
   }
 
   .studio-editor .color-row .swatches {
     display: flex;
-    flex: 0 0 auto;
+    flex-wrap: nowrap;
     gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
   }
 
   .studio-editor .color-row .swatch {
@@ -769,6 +781,7 @@
 
   .studio-editor .color-row .custom-color-picker {
     flex: 0 0 44px;
+    z-index: 300;
   }
 
   .studio-editor .color-row .custom-color-trigger {

@@ -638,8 +638,8 @@ select {
 }
 
 .avatar-frame-preview-circle {
-  width: 23px;
-  height: 25px;
+  width: 24px;
+  height: 29px;
   border-radius: 0;
   color: var(--frame-color, #1c9cc7);
   background: transparent;
@@ -652,7 +652,7 @@ select {
   overflow: visible;
   fill: #ffffff;
   stroke: currentColor;
-  stroke-width: 1.35;
+  stroke-width: 1.65;
   stroke-linecap: round;
   stroke-linejoin: round;
 }

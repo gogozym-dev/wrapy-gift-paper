@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="512" height="512" viewBox="0 0 512 512"
+     color="#3A5B93"
+     role="img" aria-labelledby="title description">
+  <title id="title">Elegant square bow and floral frame</title>
+  <desc id="description">An editable hand-drawn floral frame with a softly folded ribbon bow.</desc>
+
+  <style>
+    .outline,
+    .detail {
+      fill: none;
+      stroke: var(--frame-color, currentColor);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .outline { stroke-width: var(--frame-stroke, 3.6); }
+    .detail  { stroke-width: var(--detail-stroke, 2.45); }
+    .accent  { fill: var(--frame-color, currentColor); }
+  </style>
+
+  <!-- Softly scalloped double border. The upper opening sits naturally behind the bow. -->
+  <g id="frame">
+    <path class="outline" d="M190 91
+      C177 104 176 122 163 140
+      C146 163 138 181 139 205
+      C140 225 128 237 117 251
+      C106 266 109 283 118 303
+      C127 324 124 343 116 365
+      C107 390 115 412 135 427
+      C148 436 160 438 176 439
+      C189 440 190 454 200 462
+      C213 472 231 458 244 468
+      C252 474 255 484 256 495"/>
+    <path class="outline" d="M322 91
+      C335 104 336 122 349 140
+      C366 163 374 181 373 205
+      C372 225 384 237 395 251
+      C406 266 403 283 394 303
+      C385 324 388 343 396 365
+      C405 390 397 412 377 427
+      C364 436 352 438 336 439
+      C323 440 322 454 312 462
+      C299 472 281 458 268 468
+      C260 474 257 484 256 495"/>
+
+    <path class="detail" d="M180 97
+      C166 116 168 132 154 151
+      C137 174 129 193 131 216
+      C133 233 121 244 112 257
+      C102 272 105 288 113 307
+      C121 327 118 348 110 372
+      C103 394 111 418 132 432
+      C145 441 159 444 173 445
+      C186 446 188 461 198 469
+      C211 479 231 467 243 477
+      C251 483 254 492 256 503"/>
+    <path class="detail" d="M332 97
+      C346 116 344 132 358 151
+      C375 174 383 193 381 216
+      C379 233 391 244 400 257
+      C410 272 407 288 399 307
+      C391 327 394 348 402 372
+      C409 394 401 418 380 432
+      C367 441 353 444 339 445
+      C326 446 324 461 314 469
+      C301 479 281 467 269 477
+      C261 483 258 492 256 503"/>
+  </g>
+
+  <!-- Delicate filled side turns retained from the source illustration. -->
+  <g id="side-turns">
+    <path class="accent" d="M116 250 C105 238 93 237 85 243 C80 247 79 253 82 258 C93 264 106 260 116 250 Z"/>
+    <path class="detail" d="M84 255 C94 251 104 250 113 253"/>
+    <path class="accent" d="M396 250 C407 238 419 237 427 243 C432 247 433 253 430 258 C419 264 406 260 396 250 Z"/>
+    <path class="detail" d="M428 255 C418 251 408 250 399 253"/>
+  </g>
+
+  <!-- Full-proportion ribbon bow with separate fold lines and soft fabric tails. -->
+  <g id="bow">
+    <path class="outline" d="M246 72
+      C232 65 221 49 202 41
+      C181 32 158 34 145 46
+      C146 59 158 72 176 81
+      C198 91 223 88 246 72 Z"/>
+    <path class="detail" d="M239 71
+      C219 69 191 60 153 47
+      C165 60 181 70 199 76
+      C214 81 227 77 239 71 Z"/>
+    <path class="outline" d="M267 72
+      C282 64 292 48 311 40
+      C332 31 355 33 368 45
+      C367 59 355 72 337 81
+      C315 92 290 88 267 72 Z"/>
+    <path class="detail" d="M274 71
+      C294 69 322 59 360 46
+      C348 60 332 71 314 77
+      C299 81 286 77 274 71 Z"/>
+
+    <path class="outline" d="M248 89
+      C236 95 233 111 230 130
+      C227 153 217 169 198 180
+      L207 186 L191 197
+      C213 199 230 191 239 175
+      C249 156 249 124 254 94
+      C252 92 250 90 248 89 Z"/>
+    <path class="detail" d="M244 96 C241 122 238 151 226 171 C220 181 211 188 199 193"/>
+
+    <path class="outline" d="M264 89
+      C276 95 279 111 282 130
+      C285 153 295 169 314 180
+      L305 186 L321 197
+      C299 199 282 191 273 175
+      C263 156 263 124 258 94
+      C260 92 262 90 264 89 Z"/>
+    <path class="detail" d="M268 96 C271 122 274 151 286 171 C292 181 301 188 313 193"/>
+
+    <path class="outline" d="M249 68
+      C255 65 263 66 267 72
+      C271 78 267 86 259 90
+      C252 92 245 88 244 81
+      C243 76 245 71 249 68 Z"/>
+  </g>
+
+  <!-- Upper-left asymmetric flower and climbing leaves. -->
+  <g id="floral-upper-left">
+    <path class="outline" d="M105 78
+      C96 70 95 60 102 56
+      C110 53 116 62 113 73
+      C117 61 126 56 133 61
+      C140 68 133 78 119 81
+      C132 78 142 83 141 91
+      C138 100 126 99 116 88
+      C122 99 118 110 109 111
+      C100 110 99 98 105 88
+      C95 95 84 92 83 84
+      C84 75 94 72 105 78 Z"/>
+    <circle class="detail" cx="111" cy="82" r="5.4"/>
+    <path class="detail" d="M103 91 C91 99 83 111 79 126 C88 119 96 110 101 100"/>
+    <path class="outline" d="M80 116 C70 120 65 129 66 141 C77 136 83 127 80 116 Z"/>
+    <path class="detail" d="M69 137 C72 129 75 123 80 118"/>
+    <path class="outline" d="M92 105 C82 104 76 110 75 120 C84 122 91 116 92 105 Z"/>
+    <path class="detail" d="M116 93 C128 98 137 104 145 114"/>
+    <path class="outline" d="M126 98 C132 89 141 89 148 96 C143 104 135 105 126 98 Z"/>
+    <path class="outline" d="M139 108 C149 103 158 106 162 115 C153 121 144 117 139 108 Z"/>
+    <path class="outline" d="M145 114 C151 122 154 132 152 142 C143 137 139 126 145 114 Z"/>
+  </g>
+
+  <!-- Upper-right cluster has a different flower rhythm to avoid a stamped mirror effect. -->
+  <g id="floral-upper-right">
+    <path class="detail" d="M397 92 C409 101 418 113 423 128"/>
+    <path class="outline" d="M407 80
+      C399 71 400 61 407 57
+      C416 55 421 65 417 75
+      C423 64 432 61 438 67
+      C443 75 434 83 422 84
+      C435 84 443 90 441 98
+      C436 106 425 102 418 92
+      C423 105 417 114 409 114
+      C400 111 401 99 407 91
+      C397 98 387 94 387 86
+      C389 78 398 76 407 80 Z"/>
+    <circle class="detail" cx="414" cy="85" r="5.2"/>
+    <path class="outline" d="M422 101 C433 99 441 104 443 114 C433 117 425 111 422 101 Z"/>
+    <path class="outline" d="M426 114 C437 117 443 125 442 137 C431 132 426 124 426 114 Z"/>
+    <path class="detail" d="M440 134 C435 126 431 120 426 116"/>
+    <path class="outline" d="M400 99 C391 102 385 109 384 119 C394 119 400 112 400 99 Z"/>
+    <path class="detail" d="M392 100 C382 102 374 108 367 117"/>
+    <path class="outline" d="M381 104 C375 96 367 96 361 102 C365 110 373 111 381 104 Z"/>
+    <path class="outline" d="M369 114 C358 110 350 114 348 123 C358 128 366 123 369 114 Z"/>
+  </g>
+
+  <!-- Lower-left bouquet overlaps the frame just enough to feel woven into it. -->
+  <g id="floral-lower-left" transform="translate(-12 0)">
+    <path class="detail" d="M109 432 C95 423 83 411 74 396"/>
+    <path class="outline" d="M82 408 C71 407 64 399 64 387 C76 390 83 397 82 408 Z"/>
+    <path class="detail" d="M67 391 C73 397 77 402 81 407"/>
+    <path class="outline" d="M73 396 C64 391 61 382 64 372 C74 377 78 385 73 396 Z"/>
+    <path class="outline" d="M96 421 C85 420 79 425 78 435 C88 439 96 433 96 421 Z"/>
+
+    <path class="outline" d="M106 428
+      C97 419 98 408 106 405
+      C115 403 120 413 116 423
+      C122 412 132 409 138 416
+      C143 424 134 432 121 433
+      C134 434 142 441 139 449
+      C134 457 123 453 116 442
+      C121 455 115 464 106 463
+      C97 460 98 448 104 440
+      C94 447 84 443 83 435
+      C84 426 96 423 106 428 Z"/>
+    <circle class="detail" cx="112" cy="434" r="5.4"/>
+
+    <path class="detail" d="M119 423 C131 414 141 404 150 392"/>
+    <path class="outline" d="M136 408 C134 398 140 390 150 389 C153 399 147 406 136 408 Z"/>
+    <path class="detail" d="M139 405 C143 399 146 394 150 390"/>
+    <path class="outline" d="M147 396 C151 385 159 380 169 383 C168 394 160 399 147 396 Z"/>
+  </g>
+
+  <!-- Lower-right bouquet is slightly taller and more open than the left. -->
+  <g id="floral-lower-right" transform="translate(12 0)">
+    <path class="detail" d="M399 433 C414 422 425 408 432 392"/>
+    <path class="outline" d="M426 407 C438 404 444 396 443 384 C431 388 425 396 426 407 Z"/>
+    <path class="detail" d="M440 388 C434 395 430 401 427 406"/>
+    <path class="outline" d="M434 394 C443 388 446 378 442 368 C432 374 429 384 434 394 Z"/>
+    <path class="outline" d="M413 420 C423 417 430 422 432 432 C423 437 414 432 413 420 Z"/>
+
+    <path class="outline" d="M405 428
+      C414 419 413 408 405 405
+      C396 403 391 413 395 423
+      C389 412 379 409 373 416
+      C368 424 377 432 390 433
+      C377 434 369 441 372 449
+      C377 457 388 453 395 442
+      C390 455 396 464 405 463
+      C414 460 413 448 407 440
+      C417 447 427 443 428 435
+      C427 426 415 423 405 428 Z"/>
+    <circle class="detail" cx="399" cy="434" r="5.4"/>
+
+    <path class="detail" d="M392 423 C380 414 370 404 361 392"/>
+    <path class="outline" d="M375 408 C377 398 371 390 361 389 C358 399 364 406 375 408 Z"/>
+    <path class="detail" d="M372 405 C368 399 365 394 361 390"/>
+    <path class="outline" d="M364 396 C360 385 352 380 342 383 C343 394 351 399 364 396 Z"/>
+  </g>
+</svg>

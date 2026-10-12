@@ -440,6 +440,7 @@ function bindEvents() {
       link.download = `gift-wrap-${spec.label.replaceAll(" ", "").replace("×", "x")}-300dpi.png`;
       link.href = exportCanvas.toDataURL("image/png");
       link.click();
+      window.trackWrapyEvent?.("download_success");
     } finally {
       button.disabled = false;
       button.removeAttribute("aria-busy");
@@ -945,24 +946,24 @@ function renderPortrait() {
 }
 
 function drawCirclePortrait(ctx, image, size) {
-  const frameCenterY = size * 0.035;
-  const imageHalfWidth = size * 0.292;
-  const imageHalfHeight = size * 0.326;
+  const frameCenterY = size * 0.012;
+  const imageHalfWidth = size * 0.282;
+  const imageHalfHeight = size * 0.348;
   const frameColor = getPortraitFrameColor();
 
   ctx.save();
   ctx.fillStyle = "#ffffff";
-  traceVintageFramePath(ctx, size, 0.365, 0.405, frameCenterY);
+  traceVintageFrameOuterPath(ctx, size, frameCenterY);
   ctx.fill();
 
   ctx.save();
-  traceVintageFramePath(ctx, size, 0.292, 0.326, frameCenterY + size * 0.006);
+  traceVintageFrameOpeningPath(ctx, size, frameCenterY);
   ctx.clip();
   drawImageCover(
     ctx,
     image,
     -imageHalfWidth,
-    frameCenterY + size * 0.006 - imageHalfHeight,
+    frameCenterY - imageHalfHeight,
     imageHalfWidth * 2,
     imageHalfHeight * 2,
   );
@@ -972,19 +973,21 @@ function drawCirclePortrait(ctx, image, size) {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.lineWidth = Math.max(1.6, size * 0.008);
-  traceVintageFramePath(ctx, size, 0.365, 0.405, frameCenterY);
+  traceVintageFrameOuterPath(ctx, size, frameCenterY);
   ctx.stroke();
   ctx.lineWidth = Math.max(1.1, size * 0.0055);
-  traceVintageFramePath(ctx, size, 0.337, 0.378, frameCenterY);
+  traceVintageFrameInnerPath(ctx, size, frameCenterY);
   ctx.stroke();
-  traceVintageFramePath(ctx, size, 0.307, 0.342, frameCenterY + size * 0.006);
+  traceVintageFrameOpeningPath(ctx, size, frameCenterY);
   ctx.stroke();
 
+  drawFrameSideFlourish(ctx, size, frameColor, frameCenterY, -1);
+  drawFrameSideFlourish(ctx, size, frameColor, frameCenterY, 1);
   drawFrameBow(ctx, size, frameColor);
-  drawFrameFlowerSprig(ctx, -size * 0.32, -size * 0.275, size, frameColor, -0.7);
-  drawFrameFlowerSprig(ctx, size * 0.32, -size * 0.275, size, frameColor, 0.7);
-  drawFrameFlowerSprig(ctx, -size * 0.31, size * 0.34, size, frameColor, -2.35);
-  drawFrameFlowerSprig(ctx, size * 0.31, size * 0.34, size, frameColor, 2.35);
+  drawFrameFlowerSprig(ctx, -size * 0.33, -size * 0.29, size, frameColor, -0.62);
+  drawFrameFlowerSprig(ctx, size * 0.33, -size * 0.29, size, frameColor, 0.62);
+  drawFrameFlowerSprig(ctx, -size * 0.305, size * 0.34, size, frameColor, -2.42);
+  drawFrameFlowerSprig(ctx, size * 0.305, size * 0.34, size, frameColor, 2.42);
   ctx.restore();
 }
 
@@ -1009,27 +1012,87 @@ function drawImageCover(ctx, image, x, y, width, height) {
   ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, x, y, width, height);
 }
 
-function traceVintageFramePath(ctx, size, halfWidthFactor, halfHeightFactor, centerY = 0) {
-  const width = size * halfWidthFactor;
-  const height = size * halfHeightFactor;
-
+function traceVintageFrameOuterPath(ctx, size, centerY = 0) {
   ctx.beginPath();
-  ctx.moveTo(0, centerY - height);
-  ctx.bezierCurveTo(width * 0.22, centerY - height, width * 0.28, centerY - height * 0.94, width * 0.5, centerY - height * 0.93);
-  ctx.bezierCurveTo(width * 0.78, centerY - height * 0.92, width * 0.78, centerY - height * 0.73, width * 0.87, centerY - height * 0.64);
-  ctx.bezierCurveTo(width * 1.03, centerY - height * 0.49, width * 0.92, centerY - height * 0.25, width, centerY - height * 0.05);
-  ctx.bezierCurveTo(width * 1.04, centerY + height * 0.23, width * 0.93, centerY + height * 0.56, width * 0.71, centerY + height * 0.75);
-  ctx.bezierCurveTo(width * 0.53, centerY + height * 0.91, width * 0.23, centerY + height * 0.86, 0, centerY + height);
-  ctx.bezierCurveTo(-width * 0.23, centerY + height * 0.86, -width * 0.53, centerY + height * 0.91, -width * 0.71, centerY + height * 0.75);
-  ctx.bezierCurveTo(-width * 0.93, centerY + height * 0.56, -width * 1.04, centerY + height * 0.23, -width, centerY - height * 0.05);
-  ctx.bezierCurveTo(-width * 0.92, centerY - height * 0.25, -width * 1.03, centerY - height * 0.49, -width * 0.87, centerY - height * 0.64);
-  ctx.bezierCurveTo(-width * 0.78, centerY - height * 0.73, -width * 0.78, centerY - height * 0.92, -width * 0.5, centerY - height * 0.93);
-  ctx.bezierCurveTo(-width * 0.28, centerY - height * 0.94, -width * 0.22, centerY - height, 0, centerY - height);
+  ctx.moveTo(0, centerY - size * 0.365);
+  ctx.bezierCurveTo(size * 0.055, centerY - size * 0.365, size * 0.087, centerY - size * 0.34, size * 0.132, centerY - size * 0.31);
+  ctx.bezierCurveTo(size * 0.177, centerY - size * 0.281, size * 0.242, centerY - size * 0.326, size * 0.298, centerY - size * 0.292);
+  ctx.bezierCurveTo(size * 0.341, centerY - size * 0.266, size * 0.319, centerY - size * 0.215, size * 0.305, centerY - size * 0.177);
+  ctx.bezierCurveTo(size * 0.292, centerY - size * 0.14, size * 0.338, centerY - size * 0.106, size * 0.35, centerY - size * 0.051);
+  ctx.bezierCurveTo(size * 0.367, centerY + size * 0.025, size * 0.328, centerY + size * 0.078, size * 0.321, centerY + size * 0.137);
+  ctx.bezierCurveTo(size * 0.31, centerY + size * 0.224, size * 0.287, centerY + size * 0.285, size * 0.243, centerY + size * 0.327);
+  ctx.bezierCurveTo(size * 0.196, centerY + size * 0.371, size * 0.108, centerY + size * 0.35, size * 0.056, centerY + size * 0.392);
+  ctx.bezierCurveTo(size * 0.032, centerY + size * 0.411, size * 0.014, centerY + size * 0.437, 0, centerY + size * 0.455);
+  ctx.bezierCurveTo(-size * 0.014, centerY + size * 0.437, -size * 0.032, centerY + size * 0.411, -size * 0.056, centerY + size * 0.392);
+  ctx.bezierCurveTo(-size * 0.108, centerY + size * 0.35, -size * 0.196, centerY + size * 0.371, -size * 0.243, centerY + size * 0.327);
+  ctx.bezierCurveTo(-size * 0.287, centerY + size * 0.285, -size * 0.31, centerY + size * 0.224, -size * 0.321, centerY + size * 0.137);
+  ctx.bezierCurveTo(-size * 0.328, centerY + size * 0.078, -size * 0.367, centerY + size * 0.025, -size * 0.35, centerY - size * 0.051);
+  ctx.bezierCurveTo(-size * 0.338, centerY - size * 0.106, -size * 0.292, centerY - size * 0.14, -size * 0.305, centerY - size * 0.177);
+  ctx.bezierCurveTo(-size * 0.319, centerY - size * 0.215, -size * 0.341, centerY - size * 0.266, -size * 0.298, centerY - size * 0.292);
+  ctx.bezierCurveTo(-size * 0.242, centerY - size * 0.326, -size * 0.177, centerY - size * 0.281, -size * 0.132, centerY - size * 0.31);
+  ctx.bezierCurveTo(-size * 0.087, centerY - size * 0.34, -size * 0.055, centerY - size * 0.365, 0, centerY - size * 0.365);
   ctx.closePath();
 }
 
+function traceVintageFrameInnerPath(ctx, size, centerY = 0) {
+  ctx.beginPath();
+  ctx.moveTo(0, centerY - size * 0.338);
+  ctx.bezierCurveTo(size * 0.07, centerY - size * 0.336, size * 0.093, centerY - size * 0.302, size * 0.137, centerY - size * 0.279);
+  ctx.bezierCurveTo(size * 0.18, centerY - size * 0.257, size * 0.224, centerY - size * 0.291, size * 0.267, centerY - size * 0.268);
+  ctx.bezierCurveTo(size * 0.299, centerY - size * 0.25, size * 0.282, centerY - size * 0.198, size * 0.274, centerY - size * 0.158);
+  ctx.bezierCurveTo(size * 0.267, centerY - size * 0.119, size * 0.302, centerY - size * 0.086, size * 0.31, centerY - size * 0.038);
+  ctx.bezierCurveTo(size * 0.319, centerY + size * 0.027, size * 0.292, centerY + size * 0.081, size * 0.285, centerY + size * 0.132);
+  ctx.bezierCurveTo(size * 0.275, centerY + size * 0.205, size * 0.253, centerY + size * 0.26, size * 0.216, centerY + size * 0.296);
+  ctx.bezierCurveTo(size * 0.177, centerY + size * 0.334, size * 0.095, centerY + size * 0.321, size * 0.047, centerY + size * 0.36);
+  ctx.bezierCurveTo(size * 0.025, centerY + size * 0.378, size * 0.012, centerY + size * 0.398, 0, centerY + size * 0.413);
+  ctx.bezierCurveTo(-size * 0.012, centerY + size * 0.398, -size * 0.025, centerY + size * 0.378, -size * 0.047, centerY + size * 0.36);
+  ctx.bezierCurveTo(-size * 0.095, centerY + size * 0.321, -size * 0.177, centerY + size * 0.334, -size * 0.216, centerY + size * 0.296);
+  ctx.bezierCurveTo(-size * 0.253, centerY + size * 0.26, -size * 0.275, centerY + size * 0.205, -size * 0.285, centerY + size * 0.132);
+  ctx.bezierCurveTo(-size * 0.292, centerY + size * 0.081, -size * 0.319, centerY + size * 0.027, -size * 0.31, centerY - size * 0.038);
+  ctx.bezierCurveTo(-size * 0.302, centerY - size * 0.086, -size * 0.267, centerY - size * 0.119, -size * 0.274, centerY - size * 0.158);
+  ctx.bezierCurveTo(-size * 0.282, centerY - size * 0.198, -size * 0.299, centerY - size * 0.25, -size * 0.267, centerY - size * 0.268);
+  ctx.bezierCurveTo(-size * 0.224, centerY - size * 0.291, -size * 0.18, centerY - size * 0.257, -size * 0.137, centerY - size * 0.279);
+  ctx.bezierCurveTo(-size * 0.093, centerY - size * 0.302, -size * 0.07, centerY - size * 0.336, 0, centerY - size * 0.338);
+  ctx.closePath();
+}
+
+function traceVintageFrameOpeningPath(ctx, size, centerY = 0) {
+  ctx.beginPath();
+  ctx.moveTo(0, centerY - size * 0.312);
+  ctx.bezierCurveTo(size * 0.064, centerY - size * 0.31, size * 0.09, centerY - size * 0.281, size * 0.128, centerY - size * 0.26);
+  ctx.bezierCurveTo(size * 0.17, centerY - size * 0.236, size * 0.206, centerY - size * 0.266, size * 0.244, centerY - size * 0.247);
+  ctx.bezierCurveTo(size * 0.274, centerY - size * 0.231, size * 0.263, centerY - size * 0.188, size * 0.254, centerY - size * 0.154);
+  ctx.bezierCurveTo(size * 0.247, centerY - size * 0.121, size * 0.278, centerY - size * 0.087, size * 0.283, centerY - size * 0.04);
+  ctx.bezierCurveTo(size * 0.291, centerY + size * 0.024, size * 0.267, centerY + size * 0.079, size * 0.26, centerY + size * 0.128);
+  ctx.bezierCurveTo(size * 0.251, centerY + size * 0.197, size * 0.229, centerY + size * 0.246, size * 0.195, centerY + size * 0.278);
+  ctx.bezierCurveTo(size * 0.159, centerY + size * 0.313, size * 0.083, centerY + size * 0.301, size * 0.043, centerY + size * 0.335);
+  ctx.bezierCurveTo(size * 0.022, centerY + size * 0.353, size * 0.01, centerY + size * 0.371, 0, centerY + size * 0.384);
+  ctx.bezierCurveTo(-size * 0.01, centerY + size * 0.371, -size * 0.022, centerY + size * 0.353, -size * 0.043, centerY + size * 0.335);
+  ctx.bezierCurveTo(-size * 0.083, centerY + size * 0.301, -size * 0.159, centerY + size * 0.313, -size * 0.195, centerY + size * 0.278);
+  ctx.bezierCurveTo(-size * 0.229, centerY + size * 0.246, -size * 0.251, centerY + size * 0.197, -size * 0.26, centerY + size * 0.128);
+  ctx.bezierCurveTo(-size * 0.267, centerY + size * 0.079, -size * 0.291, centerY + size * 0.024, -size * 0.283, centerY - size * 0.04);
+  ctx.bezierCurveTo(-size * 0.278, centerY - size * 0.087, -size * 0.247, centerY - size * 0.121, -size * 0.254, centerY - size * 0.154);
+  ctx.bezierCurveTo(-size * 0.263, centerY - size * 0.188, -size * 0.274, centerY - size * 0.231, -size * 0.244, centerY - size * 0.247);
+  ctx.bezierCurveTo(-size * 0.206, centerY - size * 0.266, -size * 0.17, centerY - size * 0.236, -size * 0.128, centerY - size * 0.26);
+  ctx.bezierCurveTo(-size * 0.09, centerY - size * 0.281, -size * 0.064, centerY - size * 0.31, 0, centerY - size * 0.312);
+  ctx.closePath();
+}
+
+function drawFrameSideFlourish(ctx, size, color, centerY, direction) {
+  ctx.save();
+  ctx.scale(direction, 1);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = Math.max(1, size * 0.0045);
+  ctx.beginPath();
+  ctx.moveTo(size * 0.327, centerY - size * 0.13);
+  ctx.bezierCurveTo(size * 0.365, centerY - size * 0.145, size * 0.375, centerY - size * 0.112, size * 0.352, centerY - size * 0.103);
+  ctx.bezierCurveTo(size * 0.331, centerY - size * 0.095, size * 0.322, centerY - size * 0.111, size * 0.337, centerY - size * 0.119);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function drawFrameFlowerSprig(ctx, x, y, size, color, rotation) {
-  const flowerRadius = size * 0.026;
+  const flowerRadius = size * 0.024;
 
   ctx.save();
   ctx.translate(x, y);
@@ -1041,16 +1104,16 @@ function drawFrameFlowerSprig(ctx, x, y, size, color, rotation) {
   ctx.lineWidth = Math.max(1, size * 0.0048);
 
   ctx.beginPath();
-  ctx.moveTo(flowerRadius * 0.35, flowerRadius * 0.5);
-  ctx.bezierCurveTo(flowerRadius * 1.8, flowerRadius * 1.1, flowerRadius * 2.2, flowerRadius * 2.2, flowerRadius * 3.1, flowerRadius * 2.9);
+  ctx.moveTo(flowerRadius * 0.3, flowerRadius * 0.45);
+  ctx.bezierCurveTo(flowerRadius * 1.35, flowerRadius * 0.8, flowerRadius * 2.3, flowerRadius * 2.05, flowerRadius * 3.7, flowerRadius * 2.6);
   ctx.stroke();
 
-  [-0.55, 0.55].forEach((offset, index) => {
+  [-0.62, 0.55, -0.38].forEach((offset, index) => {
     ctx.save();
-    ctx.translate(flowerRadius * (1.35 + index * 0.75), flowerRadius * (1.25 + index * 0.7));
+    ctx.translate(flowerRadius * (1.35 + index * 0.8), flowerRadius * (0.95 + index * 0.55));
     ctx.rotate(offset);
     ctx.beginPath();
-    ctx.ellipse(0, 0, flowerRadius * 0.72, flowerRadius * 0.34, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, flowerRadius * 0.82, flowerRadius * 0.33, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     ctx.restore();
@@ -1074,10 +1137,11 @@ function drawFrameFlowerSprig(ctx, x, y, size, color, rotation) {
 }
 
 function drawFrameBow(ctx, size, color) {
-  const y = -size * 0.37;
-  const knotRadius = size * 0.026;
-  const loopWidth = size * 0.195;
-  const loopHeight = size * 0.105;
+  const y = -size * 0.39;
+  const knotRadius = size * 0.027;
+  const leftLoopWidth = size * 0.215;
+  const rightLoopWidth = size * 0.202;
+  const loopHeight = size * 0.115;
 
   ctx.save();
   ctx.strokeStyle = color;
@@ -1085,37 +1149,37 @@ function drawFrameBow(ctx, size, color) {
   ctx.lineWidth = Math.max(1.3, size * 0.007);
 
   ctx.beginPath();
-  ctx.moveTo(-knotRadius * 0.7, y);
-  ctx.bezierCurveTo(-size * 0.095, y - loopHeight, -loopWidth, y - loopHeight * 0.92, -loopWidth, y - loopHeight * 0.24);
-  ctx.bezierCurveTo(-loopWidth, y + loopHeight * 0.58, -size * 0.082, y + loopHeight * 0.44, -knotRadius * 0.6, y + knotRadius * 0.22);
+  ctx.moveTo(-knotRadius * 0.68, y - knotRadius * 0.1);
+  ctx.bezierCurveTo(-size * 0.075, y - loopHeight * 0.44, -size * 0.126, y - loopHeight * 1.03, -leftLoopWidth, y - loopHeight * 0.82);
+  ctx.bezierCurveTo(-leftLoopWidth - size * 0.022, y - loopHeight * 0.74, -leftLoopWidth + size * 0.006, y - loopHeight * 0.04, -leftLoopWidth * 0.78, y + loopHeight * 0.22);
+  ctx.bezierCurveTo(-leftLoopWidth * 0.54, y + loopHeight * 0.58, -size * 0.076, y + loopHeight * 0.38, -knotRadius * 0.56, y + knotRadius * 0.28);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(knotRadius * 0.7, y);
-  ctx.bezierCurveTo(size * 0.095, y - loopHeight, loopWidth, y - loopHeight * 0.92, loopWidth, y - loopHeight * 0.24);
-  ctx.bezierCurveTo(loopWidth, y + loopHeight * 0.58, size * 0.082, y + loopHeight * 0.44, knotRadius * 0.6, y + knotRadius * 0.22);
+  ctx.moveTo(knotRadius * 0.68, y - knotRadius * 0.1);
+  ctx.bezierCurveTo(size * 0.072, y - loopHeight * 0.42, size * 0.123, y - loopHeight * 0.97, rightLoopWidth, y - loopHeight * 0.76);
+  ctx.bezierCurveTo(rightLoopWidth + size * 0.019, y - loopHeight * 0.67, rightLoopWidth - size * 0.004, y - loopHeight * 0.01, rightLoopWidth * 0.77, y + loopHeight * 0.24);
+  ctx.bezierCurveTo(rightLoopWidth * 0.52, y + loopHeight * 0.57, size * 0.072, y + loopHeight * 0.37, knotRadius * 0.56, y + knotRadius * 0.28);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(-knotRadius * 0.45, y + knotRadius * 0.55);
-  ctx.bezierCurveTo(-size * 0.046, y + size * 0.075, -size * 0.075, y + size * 0.13, -size * 0.102, y + size * 0.17);
-  ctx.lineTo(-size * 0.055, y + size * 0.15);
-  ctx.lineTo(-size * 0.025, y + size * 0.18);
-  ctx.bezierCurveTo(-size * 0.014, y + size * 0.11, -size * 0.006, y + size * 0.07, 0, y + knotRadius);
+  ctx.moveTo(-knotRadius * 0.42, y + knotRadius * 0.6);
+  ctx.bezierCurveTo(-size * 0.045, y + size * 0.074, -size * 0.078, y + size * 0.139, -size * 0.112, y + size * 0.188);
+  ctx.bezierCurveTo(-size * 0.086, y + size * 0.177, -size * 0.068, y + size * 0.19, -size * 0.052, y + size * 0.205);
+  ctx.bezierCurveTo(-size * 0.035, y + size * 0.139, -size * 0.014, y + size * 0.071, 0, y + knotRadius * 0.92);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(knotRadius * 0.45, y + knotRadius * 0.55);
-  ctx.bezierCurveTo(size * 0.046, y + size * 0.075, size * 0.075, y + size * 0.13, size * 0.102, y + size * 0.17);
-  ctx.lineTo(size * 0.055, y + size * 0.15);
-  ctx.lineTo(size * 0.025, y + size * 0.18);
-  ctx.bezierCurveTo(size * 0.014, y + size * 0.11, size * 0.006, y + size * 0.07, 0, y + knotRadius);
+  ctx.moveTo(knotRadius * 0.42, y + knotRadius * 0.6);
+  ctx.bezierCurveTo(size * 0.042, y + size * 0.071, size * 0.074, y + size * 0.132, size * 0.105, y + size * 0.181);
+  ctx.bezierCurveTo(size * 0.082, y + size * 0.171, size * 0.064, y + size * 0.184, size * 0.049, y + size * 0.198);
+  ctx.bezierCurveTo(size * 0.032, y + size * 0.132, size * 0.013, y + size * 0.069, 0, y + knotRadius * 0.92);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -1127,10 +1191,14 @@ function drawFrameBow(ctx, size, color) {
 
   ctx.lineWidth = Math.max(1, size * 0.0045);
   ctx.beginPath();
-  ctx.moveTo(-knotRadius, y);
-  ctx.bezierCurveTo(-size * 0.08, y - size * 0.025, -size * 0.125, y - size * 0.045, -loopWidth * 0.88, y - loopHeight * 0.34);
-  ctx.moveTo(knotRadius, y);
-  ctx.bezierCurveTo(size * 0.08, y - size * 0.025, size * 0.125, y - size * 0.045, loopWidth * 0.88, y - loopHeight * 0.34);
+  ctx.moveTo(-knotRadius * 0.95, y - knotRadius * 0.08);
+  ctx.bezierCurveTo(-size * 0.078, y - size * 0.026, -size * 0.13, y - size * 0.055, -leftLoopWidth * 0.89, y - loopHeight * 0.54);
+  ctx.moveTo(knotRadius * 0.95, y - knotRadius * 0.08);
+  ctx.bezierCurveTo(size * 0.075, y - size * 0.024, size * 0.124, y - size * 0.052, rightLoopWidth * 0.89, y - loopHeight * 0.5);
+  ctx.moveTo(-knotRadius * 0.48, y + knotRadius * 0.7);
+  ctx.bezierCurveTo(-size * 0.032, y + size * 0.08, -size * 0.057, y + size * 0.136, -size * 0.079, y + size * 0.167);
+  ctx.moveTo(knotRadius * 0.48, y + knotRadius * 0.7);
+  ctx.bezierCurveTo(size * 0.03, y + size * 0.078, size * 0.054, y + size * 0.13, size * 0.075, y + size * 0.16);
   ctx.stroke();
   ctx.restore();
 }
